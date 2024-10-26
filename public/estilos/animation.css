@@ -1,0 +1,31 @@
+@keyframes rubberBand {
+    0% {
+      transform: scaleX(1);
+    }
+    30% {
+      transform: scaleX(1.25);
+    }
+    40% {
+      transform: scaleX(0.75);
+    }
+    50% {
+      transform: scaleX(1.15);
+    }
+    65% {
+      transform: scaleX(0.95);
+    }
+    75% {
+      transform: scaleX(1.05);
+    }
+    100% {
+      transform: scaleX(1);
+    }
+  }
+  
+  .rubberBand {
+    animation-name: rubberBand;
+  }
+  .animate__animated .icono-megusta {
+    
+  }
+  

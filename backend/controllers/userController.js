@@ -4,6 +4,11 @@ const autenticar = (req, res) => {
         mensaje: 'Autenticado correctamente',
     });
 };
+const registrar = (req, res) => {
+    res.json({
+        mensaje: 'Registro exitoso',
+    });
+}
 
 export default { autenticar };
 

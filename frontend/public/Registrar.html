@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar</title>
+    <link rel="stylesheet" href="estilos/loginStyle.css">
+    <script src="javaScript/validarInputs.js"></script>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="form-container">
+            <div class="logo-container">
+                <img src="imagenes/Sport_Logo-removebg.png" alt="">
+            </div>
+            <h1>
+                <span>Registrarse</span>
+            </h1>
+            <form action="#">
+
+                <div id="grupo_1" class="grupo_1">
+                    <div class="input-user">
+                        <input id="name" required="" type="text" name="nombre del usuario" autocomplete="off"
+                            class="input" />
+                        <label class="user-label">Nombre Completo</label>
+                    </div>
+                    <div id="error-name"></div>
+
+                    <div id="emailElement" class="input-user">
+                        <input id="email" required="" type="text" name="email-input" autocomplete="off" class="input" />
+                        <label class="user-label">Correo electrónico</label>
+                    </div>
+                    <div id="errorEmail"></div>
+
+                    <div id="passwordElement" class="input-user">
+                        <input id="password" required="" type="password" name="password-input" autocomplete="off"
+                            class="input" />
+                        <label class="user-label">Contraseña</label>
+                    </div>
+                    <div id="errorContraseña"></div>
+                </div>
+
+
+                <div id="grupo_2" class="grupo_2">
+
+                    <div class="input-user">
+                        <input id="phone_number" required="" type="number" name="phone_number" autocomplete="off"
+                            class="input" />
+                        <label class="user-label">Telefono</label>
+                    </div>
+                    <div id="error-phone_number"></div>
+
+                    <div id="dateElement" class="input-user">
+                        <input id="nacimiento" required="" type="date" name="fecha de nacimient" autocomplete="off"
+                            class="input input-date" />
+                        <label class="user-label">Fecha de nacimiento</label>
+                    </div>
+                    <div id="error-nacimiento"></div>
+
+                    <div id="genderElement" class="input-user-radio">
+                        <p>Genero:</p>
+                        <div class="input-container">
+                            <div class="inputGenero">
+                                <input type="radio" id="gender" name="gender" value="hombre">
+                                <span for="male">Hombre</span>
+                            </div>
+                            <div class="inputGenero">
+                                <input type="radio" id="gender" name="gender" value="mujer">
+                                <span for="female">Mujer</span>
+                            </div>
+                            <div class="inputGenero">
+                                <input type="radio" id="gender" name="gender" value="otro">
+                                <span for="other">Otro</span>
+                            </div>
+                        </div>
+                        <div id="error-gender"></div>
+                    </div>
+
+                </div>
+
+
+                <button id="botonSiguiente" type="submit">Siguiente</button>
+                
+            </form>
+
+
+        </div>
+    </div>
+    <footer>
+        <p>© 2024 Blog Deportes. Todos los derechos reservados.</p>
+    </footer>
+    <script>
+        let bloqueActual = 1; // 1 para el primer bloque, 2 para el segundo
+
+const siguiente = document.getElementById('botonSiguiente').addEventListener('click', function (e) {
+    e.preventDefault();
+
+    // Limpiar errores
+    limpiarErrores();
+
+    if (bloqueActual === 1) {
+        // Variables del primer bloque
+        const name = document.getElementById('name');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const grupo1 = document.getElementById('grupo_1');
+        const grupo2 = document.getElementById('grupo_2');
+
+        // Valida el primer bloque
+        if (validateNoVoid(name) & validateEmail(email) & validatePassword(password)) {
+            grupo1.style.display = 'none';
+            grupo2.style.display = 'block';
+            bloqueActual = 2; // Cambiamos al bloque 2
+        }
+    } else if (bloqueActual === 2) {
+        // Variables del segundo bloque
+        const phone_number = document.getElementById('phone_number');
+        const nacimiento = document.getElementById('nacimiento');
+        const gender = document.querySelector('input[name="gender"]:checked');
+
+        // Valida el segundo bloque
+        if (validateNoVoid(phone_number) & validateNoVoid(nacimiento) & validateNoVoid(gender)) {
+            console.log('Formulario completo y enviado correctamente');
+            // Aquí puedes continuar con el envío del formulario o lógica adicional
+        }
+    }
+});
+
+function limpiarErrores() {
+    document.getElementById('errorEmail').innerHTML = "";
+    document.getElementById('errorContraseña').innerHTML = "";
+}
+
+    </script>
+</body>
+
+</html>

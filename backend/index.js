@@ -1,13 +1,46 @@
 import express from 'express';
 import v1UserRoutes from './v1/routes/userRoutes.js';
-import path from 'path';  // Cambié 'pat' a 'path'
+import sequelize from './config/database.js';
+import dotenv from 'dotenv';
+
+dotenv.config(); // Cargar variables de entorno
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
+// Middleware para manejar JSON
+app.use(express.json());
+
+// Definir rutas
 app.use("/api/v1/users", v1UserRoutes);
 
-
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+// Ruta raíz
+app.use('/', (req, res) => {
+    res.send('API Restful de usuarios');
 });
+
+// Manejar rutas no encontradas
+app.use((req, res) => {
+    res.status(404).send('Ruta no encontrada');
+});
+
+// Manejo de errores global
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Error interno del servidor');
+});
+
+// Sincronizar la base de datos y luego iniciar el servidor
+sequelize.sync({ force: false }).then(() => {
+    console.log('Base de datos sincronizada');
+  
+    // Iniciar el servidor
+    app.listen(PORT, () => {
+      console.log(`Servidor corriendo en el puerto ${PORT}`);
+    });
+}).catch(err => {
+    console.error('Error al sincronizar la base de datos:', err);
+});
+
+
 

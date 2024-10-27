@@ -6,9 +6,6 @@ const app = express();
 
 app.use("/api/v1/users", v1UserRoutes);
 
-// Servir archivos estáticos de la carpeta 'public'
-app.use(express.static(path.join(path.resolve(), 'public')));
-
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');

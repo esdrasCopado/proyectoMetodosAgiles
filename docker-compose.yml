@@ -1,0 +1,43 @@
+
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: my_database
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend
+    container_name: node-backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/usr/src/app
+    networks:
+      - app-network
+    depends_on:
+      - mysql
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: apache-frontend
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

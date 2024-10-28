@@ -14,27 +14,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Change directory to backend
+        working-directory: ./backend
+        run: |
+          pwd  # Para verificar en qué directorio estamos
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '21'  # Cambia la versión según tus necesidades
+          node-version: '18'  # Ajusta según tu versión
 
       - name: Install dependencies
+        working-directory: ./backend
         run: npm install
-        working-directory: ./proyectoMetodosAgiles/backend  # Especifica el directorio de trabajo
 
       - name: Run tests
+        working-directory: ./backend
         run: npm test
-        working-directory: ./proyectoMetodosAgiles/backend  # Especifica el directorio de trabajo
-
-      - name: Run a one-line script
-        run: echo Hello, world!
-        working-directory: ./proyectoMetodosAgiles/backend  # Especifica el directorio de trabajo
-
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-        working-directory: ./proyectoMetodosAgiles/backend  # Especifica el directorio de trabajo
 
 

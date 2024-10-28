@@ -51,24 +51,25 @@ jobs:
         working-directory: ./backend
         run: npm install
 
-      - name: Esperar a que MySQL esté listo
-        run: |
-          until mysqladmin ping -h "$DB_HOST" --silent; do
-            echo "Esperando a MySQL..."
-            sleep 5
-          done
-
       - name: Fix permissions for Mocha
         working-directory: ./backend
         run: chmod +x ./node_modules/.bin/mocha
 
+      - name: Esperar a que MySQL esté listo
+        run: |
+          until mysqladmin ping -h "$DB_HOST" --silent; do
+            echo "Esperando a MySQL..."
+            sleep 1
+          done
+
       - name: Sync database before tests
         working-directory: ./backend
-        run: node ./test/syncDataBase.js
+        run: node ./test/syncDataBase.js # Cambia esta ruta si es necesario
 
       - name: Run tests
         working-directory: ./backend
         run: npm test
+
 
 
 

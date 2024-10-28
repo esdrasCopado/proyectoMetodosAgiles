@@ -27,9 +27,18 @@ jobs:
         working-directory: ./backend
         run: npm install
 
+      - name: List node_modules bin directory
+        working-directory: ./backend
+        run: ls -l ./node_modules/.bin/  # Verificar si mocha está instalado
+
+      - name: Give execution permissions to mocha
+        working-directory: ./backend
+        run: chmod +x ./node_modules/.bin/mocha  # Cambiar permisos
+
       - name: Run tests
         working-directory: ./backend
-        run: npx mocha --exit  # Usa npx para ejecutar mocha sin problemas de permisos
+        run: npx --no-install mocha --exit  # Forzar ejecución con npx sin instalación global
+
 
 
 

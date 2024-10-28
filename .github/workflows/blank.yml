@@ -16,8 +16,7 @@ jobs:
 
       - name: Change directory to backend
         working-directory: ./backend
-        run: |
-          pwd  # Para verificar en qué directorio estamos
+        run: pwd  # Para verificar en qué directorio estamos
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -30,6 +29,7 @@ jobs:
 
       - name: Run tests
         working-directory: ./backend
-        run: npm test
+        run: npx mocha --exit  # Usa npx para ejecutar mocha sin problemas de permisos
+
 
 

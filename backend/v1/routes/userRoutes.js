@@ -6,6 +6,7 @@ const route = express.Router();
 
 // Define API endpoints
 route
-  .get('/', userController.autenticar);
+  .get('/autenticarUsuario', userController.autenticar)
+  .post('/registrarUsuario', userController.registrar)
 
 export default route;

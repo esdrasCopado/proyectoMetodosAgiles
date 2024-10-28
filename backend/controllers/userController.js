@@ -1,5 +1,4 @@
-import Sorteo from '../models/Sorteos.js';
-import NumeroSorteo from '../models/NumeroSorteo.js';
+
 import Usuario from '../models/Usuario.js';
 import sequelize from '../config/database.js';  // Asegúrate de que esta ruta es correcta
 
@@ -14,6 +13,10 @@ const registrar = async (req, res) => {
     const t = await sequelize.transaction();  // Creas la transacción aquí
     try {
         const { nombre, email, contrasena } = req.body;
+
+        if(nombre!=null && email!=null && contrasena!=null){
+            res.status(500)
+        }
 
         // Creas el usuario con la transacción que has definido
         const usuario = await Usuario.create({ nombre, email, contrasena }, { transaction: t });

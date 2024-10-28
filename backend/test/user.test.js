@@ -3,11 +3,21 @@ import { expect } from 'chai';
 import request from 'supertest';
 import app from '../index.js';  // Tu archivo principal de la aplicación
 import Usuario from '../models/Usuario.js';  // El modelo Usuario
+import sequelize from '../config/database.js';
 
 describe('Controlador Usuario - registrar', () => {
+    // Sincronizar la base de datos antes de ejecutar las pruebas
+    before(async () => {
+        await sequelize.sync({ force: true });
+    });
+
     beforeEach(async () => {
-      // Borrar todos los usuarios antes de cada prueba
-      await Usuario.destroy({ where: {} });
+        // Borrar todos los usuarios antes de cada prueba
+        await Usuario.destroy({ where: {} });
+    });
+
+    afterEach(() => {
+        sinon.restore();  // Restaurar cualquier stub creado con Sinon
     });
 
     it('Debería registrar un usuario correctamente', async () => {
@@ -53,5 +63,10 @@ describe('Controlador Usuario - registrar', () => {
         expect(res.status).to.equal(400);
         expect(res.body).to.have.property('mensaje', 'El nombre es requerido'); // Asegúrate de que tu controlador maneje esto
     });
+});
+
+
+before(async () => {
+  await sequelize.sync({ force: true });
 });
 

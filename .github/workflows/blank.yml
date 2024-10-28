@@ -11,25 +11,63 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test_db
+          MYSQL_USER: test_user
+          MYSQL_PASSWORD: test_password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping --silent"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+
+    env: 
+      DB_HOST: 127.0.0.1
+      DB_NAME: test_db
+      DB_USER: test_user
+      DB_PASSWORD: test_password
+      DB_DIALECT: mysql
+      DB_PORT: 3306
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '21'
+          node-version: '18'
 
       - name: Change directory to backend
         working-directory: ./backend
-        run: pwd  # Para verificar en qué directorio estamos
+        run: pwd
 
       - name: Install dependencies
         working-directory: ./backend
         run: npm install
 
+      - name: Fix permissions for Mocha
+        working-directory: ./backend
+        run: chmod +x ./node_modules/.bin/mocha
+
+      - name: Esperar a que MySQL esté listo
+        run: |
+          until mysqladmin ping -h "$DB_HOST" --silent; do
+            echo "Esperando a MySQL..."
+            sleep 1
+          done
+
       - name: Run tests
         working-directory: ./backend
-        run: npm test  # Esto ejecutará el script 'test' definido en package.json
+        run: npm test
+
+
+
 
 
 

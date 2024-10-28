@@ -11,56 +11,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:latest
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: test_db
-          MYSQL_USER: test_user
-          MYSQL_PASSWORD: test_password
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd "mysqladmin ping --silent"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
-
-    env: 
-      DB_HOST: 127.0.0.1
-      DB_NAME: test_db
-      DB_USER: test_user
-      DB_PASSWORD: test_password
-      DB_DIALECT: mysql
-      DB_PORT: 3306
-
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '21'
+          node-version: '18'  # Ajusta según tu versión estable preferida
 
       - name: Change directory to backend
         working-directory: ./backend
-        run: pwd 
+        run: pwd  # Para verificar en qué directorio estamos
 
       - name: Install dependencies
         working-directory: ./backend
         run: npm install
 
-      - name: Verify node_modules/.bin contents
+      - name: Fix permissions for Mocha
         working-directory: ./backend
-        run: ls -l ./node_modules/.bin/
-
+        run: chmod +x ./node_modules/.bin/mocha
+      
       - name: Run tests
         working-directory: ./backend
-        run: npx mocha tests/*
-
-
-
+        run: npm test
 
 
 

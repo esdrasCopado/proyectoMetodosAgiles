@@ -14,30 +14,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Change directory to backend
-        working-directory: ./backend
-        run: pwd  # Para verificar en qué directorio estamos
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Ajusta según tu versión
+          node-version: '18'
+
+      - name: Change directory to backend
+        working-directory: ./backend
+        run: pwd  # Para verificar en qué directorio estamos
 
       - name: Install dependencies
         working-directory: ./backend
         run: npm install
 
-      - name: List node_modules bin directory
-        working-directory: ./backend
-        run: ls -l ./node_modules/.bin/  # Verificar si mocha está instalado
-
-      - name: Give execution permissions to mocha
-        working-directory: ./backend
-        run: chmod +x ./node_modules/.bin/mocha  # Cambiar permisos
-
       - name: Run tests
         working-directory: ./backend
-        run: npx --no-install mocha --exit  # Forzar ejecución con npx sin instalación global
+        run: npm test  # Esto ejecutará el script 'test' definido en package.json
 
 
 

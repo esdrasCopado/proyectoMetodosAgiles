@@ -24,7 +24,7 @@ app.use((req, res) => {
     res.status(404).send('Ruta no encontrada');
 });
 
-// Manejo de errores global
+
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Error interno del servidor');
@@ -41,6 +41,8 @@ sequelize.sync({ force: false }).then(() => {
 }).catch(err => {
     console.error('Error al sincronizar la base de datos:', err);
 });
+
+export default app;
 
 
 

@@ -35,50 +35,24 @@
                     </div>
                     <div id="errorEmail"></div>
 
-                    <div id="passwordElement" class="input-user">
-                        <input id="password" required="" type="password" name="password-input" autocomplete="off"
-                            class="input" />
-                        <label class="user-label">Contraseña</label>
-                    </div>
-                    <div id="errorContraseña"></div>
+                    
                 </div>
 
 
                 <div id="grupo_2" class="grupo_2">
-
-                    <div class="input-user">
-                        <input id="phone_number" required="" type="number" name="phone_number" autocomplete="off"
+                    <div id="passwordElement" class="input-user">
+                        <input id="password1" required="" type="password" name="password-input" autocomplete="off"
                             class="input" />
-                        <label class="user-label">Telefono</label>
+                        <label class="user-label">Contraseña</label>
                     </div>
-                    <div id="error-phone_number"></div>
+                    <div id="errorContraseña"></div>
 
-                    <div id="dateElement" class="input-user">
-                        <input id="nacimiento" required="" type="date" name="fecha de nacimient" autocomplete="off"
-                            class="input input-date" />
-                        <label class="user-label">Fecha de nacimiento</label>
+                    <div id="passwordElement2" class="input-user">
+                        <input id="password2" required="" type="password" name="password-input" autocomplete="off"
+                            class="input" />
+                        <label class="user-label">Repetir Contraseña</label>
                     </div>
-                    <div id="error-nacimiento"></div>
-
-                    <div id="genderElement" class="input-user-radio">
-                        <p>Genero:</p>
-                        <div class="input-container">
-                            <div class="inputGenero">
-                                <input type="radio" id="gender" name="gender" value="hombre">
-                                <span for="male">Hombre</span>
-                            </div>
-                            <div class="inputGenero">
-                                <input type="radio" id="gender" name="gender" value="mujer">
-                                <span for="female">Mujer</span>
-                            </div>
-                            <div class="inputGenero">
-                                <input type="radio" id="gender" name="gender" value="otro">
-                                <span for="other">Otro</span>
-                            </div>
-                        </div>
-                        <div id="error-gender"></div>
-                    </div>
-
+                    <div id="errorContraseña2"></div>
                 </div>
 
 
@@ -105,24 +79,22 @@ const siguiente = document.getElementById('botonSiguiente').addEventListener('cl
         // Variables del primer bloque
         const name = document.getElementById('name');
         const email = document.getElementById('email');
-        const password = document.getElementById('password');
+        
         const grupo1 = document.getElementById('grupo_1');
         const grupo2 = document.getElementById('grupo_2');
 
         // Valida el primer bloque
-        if (validateNoVoid(name) & validateEmail(email) & validatePassword(password)) {
+        if (validateNoVoid(name) & validateEmail(email)) {
             grupo1.style.display = 'none';
             grupo2.style.display = 'block';
             bloqueActual = 2; // Cambiamos al bloque 2
         }
     } else if (bloqueActual === 2) {
         // Variables del segundo bloque
-        const phone_number = document.getElementById('phone_number');
-        const nacimiento = document.getElementById('nacimiento');
-        const gender = document.querySelector('input[name="gender"]:checked');
-
+        const password1 = document.getElementById('password1');
+        const password2 = document.getElementById('password2');
         // Valida el segundo bloque
-        if (validateNoVoid(phone_number) & validateNoVoid(nacimiento) & validateNoVoid(gender)) {
+        if (validatePassword(password1, password2)) {
             console.log('Formulario completo y enviado correctamente');
             // Aquí puedes continuar con el envío del formulario o lógica adicional
         }

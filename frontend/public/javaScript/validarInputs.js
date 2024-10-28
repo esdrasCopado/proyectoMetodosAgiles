@@ -28,7 +28,12 @@ function validateEmail(emailElement) {
     }
 }
 
-function validatePassword(passwordElement) {
+function validatePassword(passwordElement,passwordElement2) {
+    if(passwordElement.value!= passwordElement2.value){
+        inputError(passwordElement2)
+        mensajeError("Las contraseñas no coinciden.", "errorContraseña2");
+        return false;
+    }
     var validPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if(passwordElement.value==""){
         inputError(passwordElement)

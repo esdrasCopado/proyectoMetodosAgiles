@@ -14,8 +14,14 @@ const registrar = async (req, res) => {
     try {
         const { nombre, email, contrasena } = req.body;
 
-        if(nombre!=null && email!=null && contrasena!=null){
-            res.status(500)
+        if (!nombre) {
+            return res.status(400).json({ mensaje: 'El nombre es requerido' }); // Detenemos la ejecución
+        }
+        if (!email) {
+            return res.status(400).json({ mensaje: 'El email es requerido' }); // Detenemos la ejecución
+        }
+        if (!contrasena) {
+            return res.status(400).json({ mensaje: 'La contraseña es requerida' }); // Detenemos la ejecución
         }
 
         // Creas el usuario con la transacción que has definido
@@ -28,11 +34,16 @@ const registrar = async (req, res) => {
     } catch (error) {
         await t.rollback();  // Si hay un error, haces rollback
         console.error('Error al registrar:', error);
-        res.status(500).json({
-            mensaje: 'Error interno del servidor',
-        });
+
+        // Captura de errores de clave duplicada para devolver el código adecuado
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(409).json({ mensaje: 'El correo electrónico ya está registrado' });
+        }
+
+        res.status(500).json({ mensaje: 'Error interno del servidor' });
     }
 };
+
 
 export default { autenticar, registrar };
 

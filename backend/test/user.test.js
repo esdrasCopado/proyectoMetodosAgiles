@@ -24,7 +24,7 @@ describe('Controlador Usuario - registrar', () => {
 
         createStub.restore();  // Restaurar el stub después de la prueba
     });
-    it('Debería responder con un error si los datos son inválidos', async () => {
+    it('Debería responder con un error si los datos del email son inválidos', async () => {
         const res = await request(app)
          .post('/api/v1/users/registrarUsuario')
          .send({ nombre: 'John Doe', email: 'john@example.com', contrasena: '' });  // Contraseña vacía
@@ -33,7 +33,7 @@ describe('Controlador Usuario - registrar', () => {
         expect(res.body).to.have.property('mensaje', 'La contraseña es requerida'); // Asegúrate de que tu controlador maneje esto
     });
 
-    it('Debería responder con un error si los datos están incompletos', async () => {
+    it('Debería responder con un error si el Nombre esta incompleto', async () => {
         const res = await request(app)
          .post('/api/v1/users/registrarUsuario')
          .send({ nombre: '', email: 'john@example.com', contrasena: 'password' });  // Nombre vacío
@@ -41,7 +41,7 @@ describe('Controlador Usuario - registrar', () => {
         expect(res.status).to.equal(400);
         expect(res.body).to.have.property('mensaje', 'El nombre es requerido'); // Asegúrate de que tu controlador maneje esto
     });
-    it('Deveria responder con un error si los datos están incompletos', async () => {
+    it('Deveria responder con un error si los datos del password están incompletos', async () => {
         const res = await request(app)
          .post('/api/v1/users/registrarUsuario')
          .send({ nombre: 'John Doe', email: '', contrasena: 'password' });  // Email vacío

@@ -13,7 +13,12 @@ const registrar = async (req, res) => {
     const t = await sequelize.transaction();  // Creas la transacción aquí
     try {
         const { nombre, email, contrasena } = req.body;
-        console.log(nombre, email, contrasena);
+
+        // Verificar si el correo ya esta registrado
+        const emailExists = await Usuario.findOne({ where: { email } });
+        if (emailExists) {
+            return res.status(409).json({ mensaje: 'El correo electrónico ya está registrado' });
+        }
 
         if (!nombre) {
             return res.status(400).json({ mensaje: 'El nombre es requerido' }); // Detenemos la ejecución

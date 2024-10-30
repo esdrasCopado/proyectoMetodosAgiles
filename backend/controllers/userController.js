@@ -13,6 +13,7 @@ const registrar = async (req, res) => {
     const t = await sequelize.transaction();  // Creas la transacción aquí
     try {
         const { nombre, email, contrasena } = req.body;
+        console.log(nombre, email, contrasena);
 
         if (!nombre) {
             return res.status(400).json({ mensaje: 'El nombre es requerido' }); // Detenemos la ejecución

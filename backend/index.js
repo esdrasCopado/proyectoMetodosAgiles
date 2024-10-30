@@ -2,14 +2,19 @@ import express from 'express';
 import v1UserRoutes from './v1/routes/userRoutes.js';
 import sequelize from './config/database.js';
 import dotenv from 'dotenv';
+import cors from 'cors';
+import config from './config-cors.js';
 
 dotenv.config(); // Cargar variables de entorno
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.use(cors());
 
 // Middleware para manejar JSON
 app.use(express.json());
+
+
 
 // Definir rutas
 app.use("/api/v1/users", v1UserRoutes);

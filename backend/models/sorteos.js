@@ -1,7 +1,8 @@
+// Sorteo.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 
-const Usuario = sequelize.define('Sorteo', {
+const Sorteo = sequelize.define('Sorteo', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -10,28 +11,38 @@ const Usuario = sequelize.define('Sorteo', {
         allowNull: false
     },
     nombreSorteo: {
-        references: {
-            model: 'numeroRifa',
-            key: 'id'
-        }
+        type: DataTypes.STRING,
+        allowNull: false
     },
     cantidadSorteos: {
         type: DataTypes.INTEGER,
         defaultValue: 0
     },
-    premio: {
-        type: DataTypes.STRING
-    },
-    ulrImagenSorteo:{
-        type: DataTypes.STRING
+    ulrImagenSorteo: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
     rangoNumeros: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
     },
     fechaInicioSorteo: { 
-        type: DataTypes.DATE
+        type: DataTypes.DATE,
+        allowNull: false
     },
     fechaFinSorteo: {
-        type: DataTypes.DATE
+        type: DataTypes.DATE,
+        allowNull: false
+    },
+    idNumerosSorteo: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'numeros_rifa', // Asegúrate de usar el nombre correcto de la tabla
+            key: 'id'
+        }
     }
-})
+}, {
+    tableName: 'sorteos' // Especifica el nombre de la tabla si deseas que sea diferente al nombre del modelo
+});
+
+export default Sorteo;

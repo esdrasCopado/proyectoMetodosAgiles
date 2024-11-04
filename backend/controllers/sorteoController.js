@@ -35,7 +35,7 @@ const crearSorteo = async (req, res) => {
         }, { transaction: t });
 
         await t.commit();
-        res.send('Sorteo creado y archivo guardado con éxito.');
+        res.status(200).send({message : 'Sorteo creado y archivo guardado con éxito.'});
     } catch (error) {
         await t.rollback();
         console.error(error);

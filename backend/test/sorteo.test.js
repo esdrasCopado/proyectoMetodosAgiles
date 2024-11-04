@@ -15,8 +15,22 @@ const __dirname = path.dirname(__filename);
 describe('controller sorteo', () => {
     describe('crearSorteo', function () {
         this.timeout(3000);
+        before(async () => {
+            await sequelize.sync({ force: true });
+        });
         after(async () => {
-            await Sorteo.destroy({ where: {} });  // Borrar todos los sorteos registrados
+            try {
+                // Verifica si la tabla existe antes de eliminar
+                const tableExists = await sequelize.query(
+                    "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'sorteos' AND TABLE_SCHEMA = 'test_db'"
+                );
+        
+                if (tableExists[0].length > 0) {
+                    await Sorteo.destroy({ where: {} });
+                }
+            } catch (error) {
+                console.error("Error en el hook after all:", error.message);
+            }
             
             try {
                 await fs.unlink(path.join(__dirname, '../uploads/imagValida.png'));  // Eliminar la imagen de prueba si existe

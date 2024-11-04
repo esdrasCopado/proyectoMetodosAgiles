@@ -18,11 +18,11 @@ const NumeroRifa = sequelize.define('NumeroRifa', {
     usuarioId: {
         type: DataTypes.INTEGER,
         references: {
-            model: 'Usuario', // Asegura que referencie el modelo Usuario
+            model: 'sorteos', // Asegura que referencie el modelo Sorteo
             key: 'id'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'SET NULL' // Si un usuario es eliminado, se asignará NULL
+        onDelete: 'SET NULL' // Si un sorteo es eliminado, se asignará NULL
     }
 }, {
     timestamps: true,

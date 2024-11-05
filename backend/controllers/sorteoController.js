@@ -24,14 +24,28 @@ const crearSorteo = async (req, res) => {
         const imagenPath = await guardarImagen(file);
         console.log("imagenPath"+imagenPath);
 
+        const fechaInicio = new Date(req.body.fechaInicioSorteo);
+        const fechaFin = new Date(req.body.fechaFinSorteo);
+        const fechaActual = new Date();
+
+        // Validar la fecha de inicio
+        if (fechaInicio <= fechaActual) {
+            return res.status(400).json({ mensaje: 'La fecha de inicio debe ser posterior a la fecha actual.' });
+        }
+
+        // Validar la fecha de fin
+        if (fechaFin <= fechaInicio) {
+            return res.status(400).json({ mensaje: 'La fecha de fin debe ser posterior a la fecha de inicio.' });
+        }
+
         // Crear el sorteo en la base de datos
         const nuevoSorteo = await Sorteo.create({
             nombreSorteo: req.body.nombreSorteo,
             cantidadSorteos: req.body.cantidadSorteos,
             ulrImagenSorteo: imagenPath,
             rangoNumeros: req.body.rangoNumeros,
-            fechaInicioSorteo: req.body.fechaInicioSorteo,
-            fechaFinSorteo: req.body.fechaFinSorteo
+            fechaInicioSorteo: fechaInicio,
+            fechaFinSorteo: fechaFin
         }, { transaction: t });
 
         await t.commit();

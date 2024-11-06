@@ -1,0 +1,92 @@
+
+/**------ Area de drag and drop--------**/
+.file-upload-form {
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4rem;
+  }
+  .file-upload-label input {
+    display: none;
+  }
+  .file-upload-label svg {
+    height: 50px;
+    fill: #fff;
+    margin-bottom: 20px;
+  }
+  .file-upload-label {
+    background: linear-gradient(90deg, rgba(255, 0, 156, 0.4), rgba(193, 0, 156, 0.4));
+    padding: 30px 70px;
+    border-radius: 40px;
+  }
+  .file-upload-design {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  .file-upload-design p{
+    color: #fff;
+    font-size: 1.5rem;
+  }
+  .browse-button {
+    cursor: pointer;
+    background-color: rgb(82, 82, 82);
+    padding: 5px 15px;
+    border-radius: 10px;
+    color: white;
+    transition: all 0.3s;
+  }
+  .browse-button:hover {
+    background-color: rgb(14, 14, 14);
+  }
+
+ 
+#upload.material-symbols-outlined {
+color: black;
+}
+
+
+/**boton de upload**/
+#upload-button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    margin-top: 1.2rem;
+    transition: transform 0.3s ease; 
+  }
+#upload-button:hover{
+    transform: scale(1.1);
+}
+
+.main, #image-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+    
+}
+.imagenesServidor{
+    margin-top: 3rem;
+}
+
+@media (max-width:600px){
+  .file-upload-design p, .browse-button{
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .file-upload-label {
+    padding: 20px 40px;
+    text-align: center;
+  }
+}
+
+
+  

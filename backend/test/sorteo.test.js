@@ -59,18 +59,14 @@ describe('controller sorteo', () => {
             // Stub del método create de Sequelize
             const sorteoStub = sinon.stub(Sorteo, 'create').resolves({
                 nombreSorteo: 'Sorteo de prueba',
-                cantidadSorteos: 100,
                 rangoNumeros: '1-100',
                 fechaInicioSorteo,
                 fechaFinSorteo,
                 ulrImagenSorteo: 'uploads/imagenesPrueba/imagValida.png'
             });
-        
-            // Enviar solicitud POST con la imagen y las fechas válidas
             const res = await request(app)
                 .post('/api/v1/sorteo/Crearsorteo')
                 .field('nombreSorteo', 'Sorteo de prueba')
-                .field('cantidadSorteos', 100)
                 .field('rangoNumeros', '1-100')
                 .field('fechaInicioSorteo', fechaInicioSorteo.toISOString())
                 .field('fechaFinSorteo', fechaFinSorteo.toISOString())

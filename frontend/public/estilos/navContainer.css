@@ -1,0 +1,47 @@
+/* estilos header*/
+
+.navbar {
+    background-color: var(--colorBlanco);
+}
+
+.navContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.navbar ul {
+    margin-top: 0;
+    list-style: none;
+    display: flex;
+    padding-right: 20px;
+}
+
+.navbar ul img {
+    width: 160px;
+    height: 38px;
+}
+
+.navbar li {
+    margin-left: 20px;
+}
+
+.navbar a {
+    color: black;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+.logo{
+    font-size: 1.3rem;
+    font-weight: 700;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}

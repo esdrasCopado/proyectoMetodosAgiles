@@ -1,6 +1,6 @@
 
 
-
+// validación de los campos de inicio de sesión y de registro
 function validateNoVoid(identificadorElement){
     if(identificadorElement.value.trim() === ""){
         inputError(identificadorElement)
@@ -50,6 +50,40 @@ function validatePassword(passwordElement,passwordElement2) {
         return false;
     }
 }
+
+// validación del registro de sorteo
+
+function validateSorteoName(nombreSorteoElement) {
+    if(nombreSorteoElement.value.trim() === ""){
+        inputError(nombreSorteoElement)
+        mensajeError("Por favor, introduzca el nombre del sorteo.", "errorNombreSorteo");
+        return false;
+    }else{
+        limpiarErrores(nombreSorteoElement); // Limpiamos el error si es que tenía uno
+        return true;
+    }
+}
+function validarRangoNumeros(rangoNumerosElement){
+    if(rangoNumerosElement.value.trim() === ""){
+        inputError(rangoNumerosElement)
+        mensajeError("Por favor, introduzca el rango de números.", "error-RangoNumeros");
+        return false;
+    }else{
+        limpiarErrores(rangoNumerosElement); // Limpiamos el error si es que tenía uno
+        return true;
+    }
+}
+function validarFecha(fechaElement){
+    if(fechaElement.value.trim() === ""){
+        inputError(fechaElement)
+        mensajeError("Por favor, introduzca la fecha de inicio del sorteo.", "error-"+fechaElement.id);
+        return false;
+    }else{
+        limpiarErrores(fechaElement); // Limpiamos el error si es que tenía uno
+        return true;
+    }
+}
+
 
 function mensajeError(message, identificador) {
     const inputElement = document.getElementById(identificador);

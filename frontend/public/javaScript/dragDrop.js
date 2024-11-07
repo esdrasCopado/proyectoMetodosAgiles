@@ -5,9 +5,9 @@ const imageContainer = document.getElementById('image-container');
 const uploadButton = document.getElementById('upload-button');
 
 const nombre = document.getElementById('nombre_sorteo');
-const rango_sorteo = document.getElementById('rango_sorteo');
-const fecha_inicio = document.getElementById('fecha_inicio');
-const fecha_fin = document.getElementById('fecha_fin');
+const RangoNumeros = document.getElementById('RangoNumeros');
+const fechaInicio = document.getElementById('fechaInicio');
+const fechaFin = document.getElementById('fechaFin');
 
 // Prevenir el comportamiento predeterminado al arrastrar y soltar
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -76,7 +76,10 @@ function handleFileInputChange() {
 
 // Validar los campos
 function checkFields() {
-    if (!nombre.value || !rango_sorteo.value || !fecha_inicio.value || !fecha_fin.value) {
+    if(!validateSorteoName(nombre) || !validarRangoNumeros(RangoNumeros)   || !validarFecha(fechaInicio) || !validarFecha(fechaFin)){
+        return false;
+    }
+    if (!nombre.value || !RangoNumeros.value || !fechaInicio.value || !fechaFin.value) {
         alert("Todos los campos deben ser completados antes de cargar el archivo.");
         return false;
     }
@@ -97,9 +100,9 @@ async function uploadFile() {
 
     const formData = new FormData();
     formData.append('nombreSorteo', nombre.value);
-    formData.append('rangoNumeros', rango_sorteo.value);
-    formData.append('fechaInicioSorteo', fecha_inicio.value);
-    formData.append('fechaFinSorteo', fecha_fin.value);
+    formData.append('rangoNumeros', RangoNumeros.value);
+    formData.append('fechaInicioSorteo', fechaInicio.value);
+    formData.append('fechaFinSorteo', fechaFin.value);
     formData.append('imagenSorteo', file);
     
     

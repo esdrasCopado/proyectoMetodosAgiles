@@ -154,29 +154,4 @@ footer {
   margin-top: 1rem;
 }
 
-/*
-    mensage de error
-  */
-.error-container {
-  display: flex;
-  margin: 0.1rem 0 0.75rem 0;
-  color: #b7332c;
-  justify-content: left;
-  font-size: 12px;
-  font-family: "Google Sans", "Noto Sans Myanmar UI", arial, sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.00625rem;
-  line-height: 1.3333333333;
-}
-.icon-container {
-  margin-right: 0.5rem;
-}
-/* Clase para el borde rojo */
-.input-error {
-  border: 1.8px solid #b7332c;
-}
 
-/* También ajustamos el color del label */
-.input-error ~ .user-label {
-  color: #b7332c;
-}

@@ -43,7 +43,21 @@ const crearSorteo = async (req, res) => {
             await t.rollback();
             return res.status(400).json({ mensaje: 'La fecha de fin debe ser posterior a la fecha de inicio.' });
         }
-        
+
+        // Validación del rango de números
+        const rangoNumeros = req.body.rangoNumeros;
+        const [numero1, numero2] = rangoNumeros.split("-").map(num => parseInt(num));
+
+        // Verificar que el primer número sea menor que el segundo
+        if (numero1 >= numero2) {
+            return res.status(400).json({ mensaje: 'El primer número debe ser menor que el segundo.' });
+        }
+
+        // Verificar que el rango sea de al menos 20 números
+        if (numero2 - numero1 < 20) {
+            return res.status(400).json({ mensaje: 'El rango de números debe ser de al menos 20 números.' });
+        }
+
         // Crear el sorteo en la base de datos
         const nuevoSorteo = await Sorteo.create({
             nombreSorteo: req.body.nombreSorteo,

@@ -4,12 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin-Products</title>
-    <link
-      rel="icon"
-      href="img/icono-paidy.svg"
-      sizes="48x48"
-      type="image/png"
-    />
+    <link rel="icon" href="imgs/favicon.png">
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
@@ -18,13 +13,27 @@
     <link rel="stylesheet" href="estilos/dragDrop.css" />
     <link rel="stylesheet" href="estilos/inputs.css">
     <link rel="stylesheet" href="estilos/formularioSorteo.css">
+    <link rel="stylesheet" href="estilos/navContainer.css">
   </head>
   <body>
+    <header>
+      <nav class="navbar">
+      <ul>
+          <div class="navContainer">
+              <a href="home.html"><div class="logo_container">
+                <img src="imgs/logo.svg" alt="">
+            </div></a>
+              <li><a href="login.html">Iniciar sesión</a></li>
+              <li><a href="Publicaciones.html">Crear publicación</a></li>
+          </div>
+      </ul>
+      </nav>
+  </header>
 
     <div class="input_container">
       <div class="main">
         <div class="titulo">
-          <h2>Registra un nuevo producto</h2>
+          <h2>Registra un nuevo Sorteo</h2>
         </div>
         <!-------------inputs-------------->
         <div class="input-user">
@@ -39,9 +48,10 @@
             <label class="user-label">Nombre del sorteo</label>
           </div>
         </div>
+        <div id="errorNombreSorteo"></div>
         <div class="input-user">
           <div  class="input-user">
-            <input id ="rango_sorteo"
+            <input id ="RangoNumeros"
               required="true"
               type="text"
               name="text"
@@ -51,16 +61,17 @@
             <label class="user-label">Rango de numeros</label>
           </div>
         </div>
+        <div id="error-RangoNumeros"></div>
         <!-- Inputs Fechas -->
         <div id="dateElement" class="input-user">
-          <input id="fecha_inicio" required="" type="date" name="fecha de nacimient" autocomplete="off"
+          <input id="fechaInicio" required="" type="date" name="fecha de nacimient" autocomplete="off"
               class="input input-date" />
           <label class="user-label">Fecha de Inicio</label>
       </div>
       <div id="error-fechaInicio"></div>
   
       <div id="dateElement" class="input-user">
-        <input id="fecha_fin" required="" type="date" name="fecha de nacimient" autocomplete="off"
+        <input id="fechaFin" required="" type="date" name="fecha de nacimient" autocomplete="off"
             class="input input-date" />
         <label class="user-label">Fecha de Fin</label>
     </div>
@@ -92,14 +103,14 @@
           />
           <button id="upload-button">
             <span id="upload" class="material-symbols-outlined"> publish </span
-            >Registrar producto
+          >Registrar Nuevo Sorteo
           </button>
         </div>
       </div>
 
     </div>
     
-
+    <script src="javaScript/validarInputs.js"></script>
     <script src="javaScript/dragDrop.js"></script>
   </body>
 </html>

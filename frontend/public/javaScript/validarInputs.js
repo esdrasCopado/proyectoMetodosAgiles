@@ -1,113 +1,168 @@
-
-
-// validación de los campos de inicio de sesión y de registro
-function validateNoVoid(identificadorElement){
-    if(identificadorElement.value.trim() === ""){
-        inputError(identificadorElement)
-        mensajeError("Por favor, introduzca un valor para este campo.", "error-"+identificadorElement.id);
+function validateNoVoid(identificadorElement) {
+    if (identificadorElement.value.trim() === "") {
+        inputError(identificadorElement);
+        mensajeError("Por favor, introduzca un valor para este campo.", "error-" + identificadorElement.id);
         return false;
-    }else{
-        limpiarErrores(identificadorElement); // Limpiamos el error si es que tenía uno
+    } else {
+        limpiarErrores("error-" + identificadorElement.id); // Limpia el mensaje de error correspondiente
         return true;
     }
 }
+
 function validateEmail(emailElement) {
-    var validEmail =  /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
-    if(emailElement.value==""){
-        inputError(emailElement)
+    var validEmail = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
+    if (emailElement.value === "") {
+        inputError(emailElement);
         mensajeError("Por favor, introduzca su correo electrónico.", "errorEmail");
         return false;
     }
-    if(validEmail.test(emailElement.value)){
-        limpiarErrores(emailElement); // Limpiamos el error si es que tenía uno
+    if (validEmail.test(emailElement.value)) {
+        limpiarErrores("errorEmail");
         return true;
-    }else{
-        inputError(emailElement)
+    } else {
+        inputError(emailElement);
         mensajeError("Correo electrónico no válido", "errorEmail");
         return false;
     }
 }
 
-function validatePassword(passwordElement,passwordElement2) {
-    if(passwordElement.value!= passwordElement2.value){
-        inputError(passwordElement2)
+function validatePassword(passwordElement, passwordElement2) {
+    if (passwordElement.value !== passwordElement2.value) {
+        inputError(passwordElement2);
         mensajeError("Las contraseñas no coinciden.", "errorContraseña2");
         return false;
     }
     var validPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    if(passwordElement.value==""){
-        inputError(passwordElement)
+    if (passwordElement.value === "") {
+        inputError(passwordElement);
         mensajeError("Por favor, introduzca una contraseña.", "errorContraseña");
         return false;
     }
-    if(validPassword.test(passwordElement.value)){
-        limpiarErrores(passwordElement); // Limpiamos el error si es que tenía uno
+    if (validPassword.test(passwordElement.value)) {
+        limpiarErrores("errorContraseña");
         return true;
-    }
-    else{
-        inputError(passwordElement)
+    } else {
+        inputError(passwordElement);
         mensajeError("Contraseña no válida. Debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.", "errorContraseña");
         return false;
     }
 }
 
-// validación del registro de sorteo
-
 function validateSorteoName(nombreSorteoElement) {
-    if(nombreSorteoElement.value.trim() === ""){
-        inputError(nombreSorteoElement)
+    if (nombreSorteoElement.value.trim() === "") {
+        inputError(nombreSorteoElement);
         mensajeError("Por favor, introduzca el nombre del sorteo.", "errorNombreSorteo");
         return false;
-    }else{
-        limpiarErrores(nombreSorteoElement); // Limpiamos el error si es que tenía uno
+    } else {
+        limpiarErrores("errorNombreSorteo");
         return true;
     }
 }
-function validarRangoNumeros(rangoNumerosElement){
-    if(rangoNumerosElement.value.trim() === ""){
-        inputError(rangoNumerosElement)
+
+function validarRangoNumeros(rangoNumerosElement) {
+    if (rangoNumerosElement.value.trim() === "") {
+        inputError(rangoNumerosElement);
         mensajeError("Por favor, introduzca el rango de números.", "error-RangoNumeros");
         return false;
-    }else{
-        limpiarErrores(rangoNumerosElement); // Limpiamos el error si es que tenía uno
+    } else {
+        limpiarErrores("error-RangoNumeros");
         return true;
     }
 }
-function validarFecha(fechaElement){
-    if(fechaElement.value.trim() === ""){
-        inputError(fechaElement)
-        mensajeError("Por favor, introduzca la fecha de inicio del sorteo.", "error-"+fechaElement.id);
+
+// Valida que la fecha de inicio no esté vacía y sea mayor que la fecha actual
+function validarFecha(fechaElement) {
+    if (fechaElement.value.trim() === "") {
+        inputError(fechaElement);
+        mensajeError("Por favor, introduzca la fecha de inicio del sorteo.", "error-" + fechaElement.id);
         return false;
-    }else{
-        limpiarErrores(fechaElement); // Limpiamos el error si es que tenía uno
+    } else {
+        const today = new Date();
+        // Dividir la fecha en partes y crear una fecha local
+        const [year, month, day] = fechaElement.value.split("-");
+        const selectedDate = new Date(year, month - 1, day); // `month - 1` porque los meses son 0-indexados
+        
+        // Ajustar ambas fechas para ignorar la hora
+        today.setHours(0, 0, 0, 0);
+        selectedDate.setHours(0, 0, 0, 0);
+
+        if (selectedDate < today) {
+            inputError(fechaElement);
+            mensajeError("La fecha debe ser la actual o una fecha posterior.", "error-" + fechaElement.id);
+            return false;
+        }
+        
+        limpiarErrores("error-" + fechaElement.id);
         return true;
     }
 }
+
+
+
+
+// Valida que la fecha de fin sea mayor que la fecha de inicio
+function validarFechas(fechaInicioElement, fechaFinElement) {
+    const fechaInicio = new Date(fechaInicioElement.value);
+    const fechaFin = new Date(fechaFinElement.value);
+
+    // Comprobar que la fecha de inicio es menor que la fecha de fin
+    if (fechaInicio.getTime() > fechaFin.getTime()) {
+        inputError(fechaInicioElement);
+        inputError(fechaFinElement);
+        mensajeError("La fecha de inicio del sorteo debe ser menor a la fecha de fin.", "error-fechaInicio");
+        return false;
+    }
+
+    // Comprobar que las fechas no sean iguales
+    if (!validarFechaNoIgual(fechaInicio, fechaFin, fechaFinElement)) {
+        return false;
+    }
+
+    limpiarErrores("error-fechas");
+    return true;
+}
+
+// Función para verificar que las fechas no sean iguales
+function validarFechaNoIgual(fechaInicio, fechaFin, fechaFinElement) {
+    // Comprobar que las fechas no son iguales
+    if (fechaInicio.getTime() === fechaFin.getTime()) {
+        inputError(fechaFinElement);
+        mensajeError("La fecha de inicio y fin deben ser diferentes.", "error-fechaFin");
+        return false;
+    }
+    return true;
+}
+
+
+
 
 
 function mensajeError(message, identificador) {
-    const inputElement = document.getElementById(identificador);
-    const htmlErrorMesaje = `
-        <div class="error-container">
-            <div class="icon-container">
-                <svg aria-hidden="true" class="warning-icon" fill="currentColor" focusable="false" width="16px" height="16px"
-                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z">
-                    </path>
-                </svg>
+    const errorContainer = document.getElementById(identificador);
+    if (errorContainer) {
+        errorContainer.innerHTML = `
+            <div class="error-container">
+                <div class="icon-container">
+                    <svg aria-hidden="true" class="warning-icon" fill="currentColor" focusable="false" width="16px" height="16px"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path>
+                    </svg>
+                </div>
+                <div class="mensaje-error">
+                    <span>${message}</span>
+                </div>
             </div>
-            <div class="mensaje-error">
-                <span>${message}</span>
-            </div>
-        </div>
-    `;
-    setTimeout(() => {
-        inputElement.innerHTML = htmlErrorMesaje;
-    }, 200); // Aparece después de 200ms
+        `;
+    }
 }
-function inputError(identificador){
-    identificador.classList.add('input-error');
+
+function inputError(element) {
+    element.classList.add('input-error');
 }
-function limpiarErrores(identificador){
-    identificador.classList.remove('input-error');
+
+function limpiarErrores(errorId) {
+    const errorContainer = document.getElementById(errorId);
+    if (errorContainer) {
+        errorContainer.innerHTML = "";
+    }
 }

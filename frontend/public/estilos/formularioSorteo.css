@@ -10,13 +10,12 @@ body{
 .main{
     width: 370px;
 }
-#image-preview{
-    border-radius: 10px;
-}
+
 
 @media (max-width:900px) {
     .main{
         width: 80%;
     }
+    
     
 }

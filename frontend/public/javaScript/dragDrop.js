@@ -79,8 +79,7 @@ function checkFields() {
     if(!validateSorteoName(nombre) || !validarRangoNumeros(RangoNumeros)   || !validarFecha(fechaInicio) || !validarFecha(fechaFin)){
         return false;
     }
-    if (!nombre.value || !RangoNumeros.value || !fechaInicio.value || !fechaFin.value) {
-        alert("Todos los campos deben ser completados antes de cargar el archivo.");
+    if (!validarFechas(fechaInicio , fechaFin)) {
         return false;
     }
     return true;
@@ -112,19 +111,21 @@ async function uploadFile() {
             method: 'POST',
             body: formData
         });
-
+    
         if (response.ok) {
             const result = await response.json();
             console.log(result);
-            alert("Archivo y datos del sorteo subidos exitosamente.");
+            generateAlert(result.message);
         } else {
+            const errorResult = await response.json(); // Extraer el mensaje de error de la respuesta
             console.error("Error en la respuesta del servidor");
-            alert("Hubo un problema al subir los datos.");
+            generateAlert(errorResult.message);
         }
     } catch (error) {
         console.error("Error en la solicitud:", error);
         alert("Error al intentar subir el archivo y los datos.");
     }
+    
 }
 
 

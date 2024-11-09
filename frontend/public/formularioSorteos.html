@@ -10,12 +10,15 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     />
 
+    
     <link rel="stylesheet" href="estilos/dragDrop.css" />
-    <link rel="stylesheet" href="estilos/inputs.css">
     <link rel="stylesheet" href="estilos/formularioSorteo.css">
+    <link rel="stylesheet" href="estilos/inputs.css">
     <link rel="stylesheet" href="estilos/navContainer.css">
+    <link rel="stylesheet" href="estilos/alertMesage.css">
   </head>
   <body>
+    
     <header>
       <nav class="navbar">
       <ul>
@@ -99,7 +102,6 @@
             id="image-preview"
             src=""
             alt="Uploaded Image"
-            style="max-width: 40%; height: auto"
           />
           <button id="upload-button">
             <span id="upload" class="material-symbols-outlined"> publish </span
@@ -110,7 +112,14 @@
 
     </div>
     
+    <div class="overlay"></div>
+
+    <div id="alert-container"></div>
+
+    </div>
     <script src="javaScript/validarInputs.js"></script>
     <script src="javaScript/dragDrop.js"></script>
+    <script src="javaScript/alertMesage.js"></script>
+    
   </body>
 </html>

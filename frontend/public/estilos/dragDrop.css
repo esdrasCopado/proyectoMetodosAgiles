@@ -6,7 +6,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 4rem;
+    margin-top: 2.5rem;
   }
   .file-upload-label input {
     display: none;
@@ -47,6 +47,7 @@
  
 #upload.material-symbols-outlined {
 color: black;
+font-size: 2rem;
 }
 
 
@@ -58,7 +59,10 @@ color: black;
     border: none;
     background-color: transparent;
     cursor: pointer;
-    margin-top: 1.2rem;
+    font-size: 1.2rem;
+    margin: 1.2rem 0;
+    flex-wrap: wrap;
+    justify-content: center;
     transition: transform 0.3s ease; 
   }
 #upload-button:hover{
@@ -71,7 +75,14 @@ color: black;
     align-items: center;
     justify-content: center;
     margin-top: 2rem;
+    width: 60%;
+    min-width: 300px;
     
+}
+#image-preview{
+  border-radius: 10px;
+  width: 25rem; 
+  height: auto;
 }
 .imagenesServidor{
     margin-top: 3rem;
@@ -86,6 +97,9 @@ color: black;
     padding: 20px 40px;
     text-align: center;
   }
+  #image-preview{
+    width: 100%;
+}
 }
 
 

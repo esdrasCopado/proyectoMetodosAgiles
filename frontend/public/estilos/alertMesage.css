@@ -1,0 +1,68 @@
+/* Superposición para difuminar el fondo */
+:root{
+    --color-overlay: rgba(0, 0, 0, 0.5);
+    --color-alert: #ffffff;
+    --color-text-alert: #000000;
+}
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* oscurecimiento del fondo */
+    backdrop-filter: blur(5px); /* efecto de desenfoque */
+    display: none; /* Oculto por defecto */
+    z-index: 1; /* Colocar detrás del mensaje de alerta */
+}
+
+/* Mensaje de alerta personalizado */
+.alertMesage {
+    width: 400px;
+    height: 200px;
+    background-color: var(--color-alert);
+    display: flex;
+    justify-content: center;
+    border-radius: 11px;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2; /* Colocar sobre la superposición */
+    color: var(--color-text-alert); /* Color de texto para mejor visibilidad */
+    display: none; /* Oculto por defecto */
+}
+.mesage{
+    font-size: 1.2rem;
+    font-weight: 400;
+    text-align: center;
+    margin-top: 1rem;
+}
+/* Ajustar el estilo de boton close*/
+.close{
+   width: 3rem;
+   height: 3rem;
+   background-color: transparent;
+   border: none;
+   top: 1rem;
+   right: 1rem;
+   cursor: pointer;
+   font-size: 2rem;
+   font-weight: bold;
+   color: var(--color-text-alert);
+   transition: background-color 0.3s ease;
+}
+
+/*ajusta el contenedor div del boton close*/
+.buttonClose{
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px 10px 0 0;
+}
+
+/* Mostrar alerta y superposición cuando sea necesario */
+body.alert-active .overlay,
+body.alert-active .alertMesage {
+    display: block;
+}

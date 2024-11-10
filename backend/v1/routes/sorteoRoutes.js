@@ -8,5 +8,6 @@ const route = express.Router();
 route
   
   .post('/Crearsorteo', sorteoRoutes.crearSorteo)
+  .get('/obtenerSorteo',sorteoRoutes.consultarSorteos)
 
 export default route;

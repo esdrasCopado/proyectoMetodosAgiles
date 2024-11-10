@@ -4,11 +4,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-  "start": "node ./index.js",
-  "dev": "nodemon ./index.js",
-  "test": "mocha --exit"
-}
-,
+    "dev": "nodemon ./index.js",
+    "test": "mocha --exit"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

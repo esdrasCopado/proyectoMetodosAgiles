@@ -14,6 +14,10 @@ const Sorteo = sequelize.define('Sorteo', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    cantidadSorteos: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
     ulrImagenSorteo: {
         type: DataTypes.STRING,
         allowNull: false

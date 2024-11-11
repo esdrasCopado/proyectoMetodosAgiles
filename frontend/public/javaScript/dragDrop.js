@@ -9,6 +9,9 @@ const RangoNumeros = document.getElementById('RangoNumeros');
 const fechaInicio = document.getElementById('fechaInicio');
 const fechaFin = document.getElementById('fechaFin');
 
+//urls for the endpoins of the api service
+const url_createSorteo = '/api/v1/sorteo/Crearsorteo';
+
 // Prevenir el comportamiento predeterminado al arrastrar y soltar
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
     dropArea.addEventListener(eventName, preventDefaults, false);
@@ -107,7 +110,7 @@ async function uploadFile() {
     
 
     try {
-        const response = await fetch('http://localhost:3000/api/v1/sorteo/Crearsorteo', {
+        const response = await fetch(hostUrl+url_createSorteo, {
             method: 'POST',
             body: formData
         });

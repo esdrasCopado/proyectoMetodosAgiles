@@ -8,14 +8,27 @@ function validateNoVoid(identificadorElement) {
         return true;
     }
 }
+function validateName(nameInput) {
+    var validNamePattern = /^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$/;
+    
+    if (!nameInput.value.trim()) {
+        inputError(nameInput);
+        mensajeError("Por favor, introduzca su nombre.", "error-name");
+        return false;
+    }
+    
+    if (validNamePattern.test(nameInput.value)) {
+        limpiarErrores("errorNombre");
+        return true;
+    } else {
+        inputError(nameInput);
+        mensajeError("Nombre no válido. Solo se permiten letras y espacios.", "error-name");
+        return false;
+    }
+}
 
 function validateEmail(emailElement) {
     var validEmail = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
-    if (emailElement.value === "") {
-        inputError(emailElement);
-        mensajeError("Por favor, introduzca su correo electrónico.", "errorEmail");
-        return false;
-    }
     if (validEmail.test(emailElement.value)) {
         limpiarErrores("errorEmail");
         return true;

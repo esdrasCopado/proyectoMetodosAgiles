@@ -49,6 +49,7 @@ const crearSorteo = async (req, res) => {
 
 // Consultar todos los sorteos en la base de datos
 const consultarSorteos = async (req, res) => {
+    console.log('se esta enviando los sorteos');
     try {
         const sorteos = await Sorteo.findAll(); // Aquí se debe usar el modelo de Sorteo
         res.status(200).send(sorteos);

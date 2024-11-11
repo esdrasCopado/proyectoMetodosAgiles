@@ -91,9 +91,13 @@ siguiente.addEventListener('click', function (e) {
         const grupo2 = document.getElementById('grupo_2');
 
         // Valida el primer bloque
-        if (validateNoVoid(name) && validateEmail(email)) {
-            grupo1.style.display = 'none';
-            grupo2.style.display = 'block';
+        if (validateName(name) && validateEmail(email)) {
+        
+            // Cambia el bloque
+                grupo1.style.display = 'none';
+                grupo2.style.display = 'block';
+            
+            
 
             // Llama a registroExitoso desde la instancia de Vue
             

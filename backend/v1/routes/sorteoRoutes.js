@@ -1,13 +1,13 @@
-import express from 'express';
-import sorteoRoutes from '../../controllers/sorteoController.js';
+import express from 'express'
+import verificarToken from '../../middlewares/auth.js'
+import sorteoRoutes from '../../controllers/sorteoController.js'
 
-const route = express.Router();
-
+const route = express.Router()
 
 // Define API endpoints
 route
-  
-  .post('/Crearsorteo', sorteoRoutes.crearSorteo)
-  .get('/obtenerSorteo',sorteoRoutes.consultarSorteos)
 
-export default route;
+  .post('/Crearsorteo', verificarToken, sorteoRoutes.crearSorteo)
+  .get('/obtenerSorteo', verificarToken, sorteoRoutes.consultarSorteos)
+
+export default route

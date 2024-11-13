@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="estilos/loginStyle.css">
     <link rel="stylesheet" href="estilos/inputs.css">
     <script src="javaScript/validarInputs.js"></script>
+    <script src="javaScript/direccionHost.js"></script>
 </head>
 <body>
     <div class="container">
@@ -50,16 +51,64 @@
 
 
 <script>
-    document.getElementById('submitButton').addEventListener('click', function(e) {
-        const email = document.getElementById('email');
-        const password = document.getElementById('password');
-        e.preventDefault();
-        limpiarErrores(); // Limpiar errores previos
+    const url_inicioSecion = '/api/v1/users/autenticarUsuario'
+    //envia la peticion al servidor
+// Función para hacer la solicitud de inicio de sesión
+async function request(email, password) {
+    try {
+        console.log(hostUrl + url_inicioSecion);
+        const response = await fetch(hostUrl + url_inicioSecion, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
 
-        if(validateEmail(email) & validatePassword(password)){
-            console.log("Formulario enviado correctamente");
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Error al iniciar sesión: ${response.status} - ${errorText}`);
         }
-    });
+
+        // Si la respuesta es exitosa, se asume que devuelve JSON
+        const data = await response.json();
+        console.log("Inicio de sesión exitoso:", data);
+        return data;  // Devuelve los datos para su posterior uso
+    } catch (error) {
+        console.error("Hubo un problema con la solicitud:");
+        throw error;  // Lanza el error para que se maneje en otro lugar, si es necesario
+    }
+}
+
+// Función para manejar el evento de clic
+document.getElementById('submitButton').addEventListener('click', async function(e) {
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    e.preventDefault(); // Prevenir la acción por defecto del formulario
+    limpiarErrores(); // Limpiar errores previos
+
+    // Validar email y contraseña antes de realizar la solicitud
+    if (validateEmail(email) && validatePassword(password,password)) {
+        try {
+            const response = await request(email.value, password.value); // Enviar la petición al servidor
+            if (response && response.token) {
+                localStorage.setItem('token', response.token);
+                // Si la respuesta contiene un token, redirigir al dashboard
+                window.location.href = 'home.html'; // URL del dashboard
+            } else {
+                // Mostrar error en caso de falla de inicio de sesión
+                document.getElementById('errorContraseña').innerHTML = 'Error: Credenciales incorrectas';
+            }
+        } catch (error) {
+            // En caso de error al realizar la solicitud
+            document.getElementById('errorContraseña').innerHTML = error.message;
+        }
+    } else {
+        // Mostrar mensaje de error si la validación falla
+        document.getElementById('errorContraseña').innerHTML = 'Por favor, ingresa un email y contraseña válidos';
+    }
+});
+
 
 
     function limpiarErrores() {

@@ -110,24 +110,37 @@ async function uploadFile() {
     
 
     try {
-        const response = await fetch(hostUrl+url_createSorteo, {
+        const token = localStorage.getItem("token");
+    
+        // Crear los encabezados, no es necesario establecer "Content-Type" para formData
+        const headers = {};
+    
+        // Si el token está disponible, agregarlo en los encabezados
+        if (token) {
+            headers["Authorization"] = `Bearer ${token}`;
+        }
+    
+        const response = await fetch(hostUrl + url_createSorteo, {
             method: 'POST',
-            body: formData
+            body: formData, // Aquí se usa formData directamente como cuerpo de la solicitud
+            headers: headers, // Los encabezados (incluyendo Authorization) se agregan aquí
         });
     
+        // Verificar si la respuesta es exitosa
         if (response.ok) {
             const result = await response.json();
             console.log(result);
-            generateAlert(result.message);
+            generateAlert(result.message); // Mostrar el mensaje de éxito o resultado
         } else {
-            const errorResult = await response.json(); // Extraer el mensaje de error de la respuesta
+            const errorResult = await response.json(); // Extraer el mensaje de error
             console.error("Error en la respuesta del servidor");
-            generateAlert(errorResult.message);
+            generateAlert(errorResult.message); // Mostrar el mensaje de error
         }
     } catch (error) {
         console.error("Error en la solicitud:", error);
-        alert("Error al intentar subir el archivo y los datos.");
+        alert("Error al intentar subir el archivo y los datos."); // Notificación de error
     }
+    
     
 }
 

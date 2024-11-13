@@ -14,15 +14,6 @@ const NumeroRifa = sequelize.define('NumeroRifa', {
     type: DataTypes.INTEGER,
     allowNull: false,
     unique: true
-  },
-  usuarioId: { // Cambié el nombre a 'usuarioId' para referirse a la tabla 'usuarios'
-    type: DataTypes.INTEGER,
-    references: {
-      model: 'usuarios', // Asegúrate de que el modelo 'usuarios' esté correctamente referenciado
-      key: 'id'
-    },
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
   }
 }, {
   timestamps: true,

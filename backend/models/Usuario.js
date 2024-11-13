@@ -2,6 +2,7 @@
 import { DataTypes } from 'sequelize'
 import sequelize from '../config/database.js'
 
+
 const Usuario = sequelize.define(
   'Usuario',
   {
@@ -22,12 +23,12 @@ const Usuario = sequelize.define(
       unique: true,
       validate: {
         isEmail: true
-      },
+      }
     },
     contrasena: {
       type: DataTypes.STRING,
       allowNull: false
-    },
+    }
   },
   {
     timestamps: true,

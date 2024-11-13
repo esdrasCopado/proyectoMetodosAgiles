@@ -1,4 +1,9 @@
 db_data/
+<<<<<<< HEAD
 backend/uploads
+=======
+backend/node_modules/
+backend/uploads/
+>>>>>>> 3f7e03d12e55269a1547081be26df3478852f241
 
 

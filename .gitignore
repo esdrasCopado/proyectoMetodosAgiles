@@ -1,4 +1,6 @@
 db_data/
-backend/uploads
+backend/node_modules/
+backend/uploads/
+
 
 

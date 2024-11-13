@@ -1,5 +1,5 @@
 //direccion publica
-//const hostUrl = 'http://127.0.0.1:3000/';
+//const hostUrl = 'http://54.144.2.71:3000/';
 
 //direccion local
 

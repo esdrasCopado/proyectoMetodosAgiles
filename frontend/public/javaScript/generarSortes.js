@@ -50,23 +50,36 @@ function generarSorteosCart(sorteo) {
 
   const descripcion = sorteo.descripcion || "Descripción no disponible";
 
-  const htmlSorteoCart = `
-        <div class="cardSorteo">
-            <img src="${
-              hostUrl + "/" + sorteo.ulrImagenSorteo
-            }" alt="Imagen representativa del sorteo">
-            <h3>${sorteo.nombreSorteo}</h3>
-            <p>Rango de numeros: ${sorteo.rangoNumeros}</p>
-            <p>Fecha de inicio: ${new Date(
-              sorteo.fechaInicioSorteo
-            ).toLocaleDateString()}</p>
-            <p>Fecha final: ${new Date(
-              sorteo.fechaFinSorteo
-            ).toLocaleDateString()}</p>
-        </div>
-    `;
-  contenedor.innerHTML += htmlSorteoCart;
+  // Crear el HTML de la card como un elemento DOM
+  const divCard = document.createElement("div");
+  divCard.className = "cardSorteo";
+  divCard.id = sorteo.id;
+
+  divCard.innerHTML = `
+    <img src="${hostUrl + "/" + sorteo.ulrImagenSorteo}" alt="Imagen representativa del sorteo">
+    <h3>${sorteo.nombreSorteo}</h3>
+    <p>Rango de números: ${sorteo.rangoNumeros}</p>
+    <p>Fecha de inicio: ${new Date(sorteo.fechaInicioSorteo).toLocaleDateString()}</p>
+    <p>Fecha final: ${new Date(sorteo.fechaFinSorteo).toLocaleDateString()}</p>
+  `;
+
+  // Agregar evento click
+  divCard.addEventListener("click", () => {
+    console.log(`Card de sorteo con ID ${sorteo.id} clickeada.`);
+    // Lógica adicional al hacer clic
+    generateNumbers(sorteo);
+  });
+
+  // Añadir la card al contenedor
+  contenedor.appendChild(divCard);
 }
+
+// Función de ejemplo para manejar clics en la card
+function mostrarDetallesSorteo(sorteo) {
+  alert(`Mostrando detalles del sorteo: ${sorteo.nombreSorteo}`);
+  // Aquí puedes implementar lógica como abrir un modal, navegar a otra página, etc.
+}
+
 
 // Llamada inicial para cargar los sorteos
 window.onload = consultarSorteos;

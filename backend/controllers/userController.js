@@ -10,13 +10,13 @@ const autenticar = async (req, res) => {
     // Busca el usuario solo por email
     const user = await Usuario.findOne({ where: { email } })
     if (!user) {
-      return res.status(401).json({ mensaje: 'Credenciales inválidas' })
+      return res.status(401).json({ mensaje: 'correo o contraseña erronea' })
     }
 
     // Compara la contraseña ingresada con la almacenada
     const isPasswordValid = await bcrypt.compare(password, user.contrasena)
     if (!isPasswordValid) {
-      return res.status(401).json({ mensaje: 'Credenciales inválidas' })
+      return res.status(401).json({ mensaje: 'correo o contraseña erronea' })
     }
     const token = jwt.sign(
       { id: user.id, email: user.email }, // Aquí puedes poner la información que desees

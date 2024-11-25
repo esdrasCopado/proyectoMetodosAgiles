@@ -32,11 +32,28 @@
     color: var(--color-text-alert); /* Color de texto para mejor visibilidad */
     display: none; /* Oculto por defecto */
 }
+
+.image-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.image-container img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    max-width: 300px;
+    border-radius: 5px;
+}
 .mesage{
     font-size: 1.2rem;
     font-weight: 400;
     text-align: center;
-    margin-top: 1rem;
+}
+.input-user{
+    margin: 10px 0 0 0;
 }
 /* Ajustar el estilo de boton close*/
 .close{
@@ -50,6 +67,12 @@
    font-weight: bold;
    color: var(--color-text-alert);
    transition: background-color 0.3s ease;
+}
+.container-sorteo{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin: 0 auto;
 }
 
 /*ajusta el contenedor div del boton close*/

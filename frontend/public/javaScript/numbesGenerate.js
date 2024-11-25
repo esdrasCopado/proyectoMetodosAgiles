@@ -1,14 +1,14 @@
 function mostrarAlerta() {
-    document.body.classList.add('alert-active');
-  }
+  document.body.classList.add("alert-active");
+}
 
-  function ocultarAlerta() {
-  document.body.classList.remove('alert-active');
-  }
+function ocultarAlerta() {
+  document.body.classList.remove("alert-active");
+}
 
-  function generateNumbers(sorteo){
-    const alertContainer = document.getElementById('alert-container');
-    alertContainer.innerHTML = `
+function generateNumbers(sorteo) {
+  const alertContainer = document.getElementById("alert-container");
+  alertContainer.innerHTML = `
       <div class="alertMesage">
       <div class="buttonClose">
         <button class="close" onclick="ocultarAlerta()">
@@ -18,13 +18,30 @@ function mostrarAlerta() {
           </svg>
         </button>
       </div>
-      
+      <div class="container-sorteo">
+      <div class="image-container">
+        <img src="${hostUrl + "/" + sorteo.ulrImagenSorteo}" alt="${sorteo.nombreSorteo}">
+      </div>
       <div class="mesage">
-       <h5>Escoge los números del sorteo ${sorteo.nombreSorteo}</h5>
+      <span class="Title-sorteo">Escoge los números de: ${sorteo.nombreSorteo}</span>
+      </div>
+      <div class="container-input">
+        <div class="input-user">
+          <div  class="input-user">
+            <input id ="buscar-numero"
+              required="true"
+              type="text"
+              name="text"
+              autocomplete="off"
+              class="input"
+            />
+            <label class="user-label">Busca un numero</label>
+          </div>
+        </div>
+        </div>
       </div>
 
     </div>
-        `
-        mostrarAlerta();
-
-  }
+        `;
+  mostrarAlerta();
+}

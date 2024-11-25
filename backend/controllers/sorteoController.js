@@ -11,6 +11,16 @@ import Sorteo from '../models/sorteos.js' // Asegúrate de importar el modelo de
 
 const crearSorteo = async (req, res) => {
   verificarToken(req)
+
+  // verificar que no exista un sorteo con el mismo nombre
+  const sorteoExiste = await Sorteo.findOne({
+    where: { nombreSorteo: req.body.nombreSorteo }
+  })
+  if (sorteoExiste) {
+    return res
+      .status(409)
+      .json({ message: 'Ya existe un sorteo con el mismo nombre.' })
+  }
   const t = await sequelize.transaction()
   try {
     if (!req.files || !req.files.imagenSorteo) {
@@ -88,7 +98,7 @@ function verificarToken (req) {
 
     console.log('Token verificado para el usuario:', userId)
   } catch (error) {
-    return res.status(401).send({ message: 'Token inválido o no proporcionado.' })
+    return error
   }
 }
 

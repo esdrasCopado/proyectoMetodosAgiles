@@ -8,6 +8,7 @@ import {
 } from '../services/validationService.js'
 import { crearSorteoEnBD } from '../services/sorteoService.js'
 import Sorteo from '../models/sorteos.js' // Asegúrate de importar el modelo de Sorteo
+import numeroController from './numeroController.js'; // Importar la función de liberación
 
 const crearSorteo = async (req, res) => {
   verificarToken(req)
@@ -80,6 +81,9 @@ const consultarSorteos = async (req, res) => {
   verificarToken(req) // Verificar el token antes de consultar los sorteos
   // Consultar los sorteos si el token es válido
   try {
+    // Liberar números expirados antes de consultar sorteos
+    await numeroController.liberarNumerosExpirados();
+
     const sorteos = await Sorteo.findAll() // Obtener los sorteos desde la base de datos
     res.status(200).send(sorteos)
   } catch (error) {

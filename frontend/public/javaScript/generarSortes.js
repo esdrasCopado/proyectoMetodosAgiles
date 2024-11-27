@@ -74,11 +74,7 @@ function generarSorteosCart(sorteo) {
   contenedor.appendChild(divCard);
 }
 
-// Función de ejemplo para manejar clics en la card
-function mostrarDetallesSorteo(sorteo) {
-  alert(`Mostrando detalles del sorteo: ${sorteo.nombreSorteo}`);
-  // Aquí puedes implementar lógica como abrir un modal, navegar a otra página, etc.
-}
+
 
 
 // Llamada inicial para cargar los sorteos

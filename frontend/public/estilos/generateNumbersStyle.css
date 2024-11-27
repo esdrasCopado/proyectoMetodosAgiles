@@ -1,0 +1,77 @@
+.container-numbers {
+    display: grid;
+    grid-template-columns: repeat(4, 65px);
+    grid-gap: 10px;
+    justify-content: center;
+    margin: 10px 0 0 0;
+}
+
+.number {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: white;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.number.selected {
+    background-color: #4caf50;
+    border-color: #3e8e41;
+    color: white;
+}
+
+.number span {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.btn-submit {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    background-color: #0056b3;
+}
+
+.btns-container{
+    display: flex;
+    justify-content:center;
+    margin-top: 15px;
+}
+#btnBack{
+    margin-right: 10px;
+}
+#btnNext{
+    margin-left: 10px;
+}
+
+#btnBack, #btnNext{
+    width: 100px;
+    height: 40px;
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#btnBack:hover, #btnNext:hover{
+    background-color: #007bff;
+    color: white;
+}
+
+.btnSumbit-Container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -21,13 +21,15 @@ const obtenerNumerosRifa = async (req, res) => {
     res.status(500).json({ mensaje: 'Error al obtener los números disponibles.' })
   }
 }
-// tipo de dato date ajustable
+
+// Tipo de dato date ajustable
 const tiempoDisponible = () => {
   const today = new Date()
   const limite = 5 // Tiempo en minutos para la reserva
   return new Date(today.getTime() + limite * 60000) // Suma 5 minutos al tiempo actual
 }
 
+// Crear o reservar números de rifa
 const crearNumeroRifa = async (req, res) => {
   const t = await sequelize.transaction()
   try {
@@ -59,7 +61,6 @@ const crearNumeroRifa = async (req, res) => {
     )
 
     // Luego, creamos los números que no existen.
-    // Filtramos los números que no están ya reservados.
     const numerosExistentes = await numeroRifa.findAll({
       where: {
         numero: numeros
@@ -71,7 +72,6 @@ const crearNumeroRifa = async (req, res) => {
     const numerosExistentesSet = new Set(numerosExistentes.map(n => n.numero))
     const numerosParaCrear = numeros.filter(n => !numerosExistentesSet.has(n))
 
-    // Si hay números que no existen, los creamos.
     if (numerosParaCrear.length > 0) {
       await numeroRifa.bulkCreate(
         numerosParaCrear.map(n => ({
@@ -94,4 +94,74 @@ const crearNumeroRifa = async (req, res) => {
   }
 }
 
-export default { obtenerNumerosRifa, crearNumeroRifa }
+// Liberar números cuya reserva haya expirado
+const liberarNumerosExpirados = async () => {
+  try {
+    const ahora = new Date()
+
+    // Actualizar los números con reservas expiradas
+    const [cantidadLiberados] = await numeroRifa.update(
+      {
+        usuarioId: null,
+        reservadoHasta: null
+      },
+      {
+        where: {
+          reservadoHasta: { [Op.lte]: ahora } // Liberar los que expiraron
+        }
+      })
+    console.log(`Liberados ${cantidadLiberados} números cuya reserva había expirado.`)
+  } catch (error) {
+    console.error('Error al liberar números expirados:', error)
+  }
+}
+
+// Liberar números manualmente por el usuario
+const liberarNumerosManualmente = async (req, res) => {
+  const t = await sequelize.transaction()
+  try {
+    const { numeros, usuarioId } = req.body
+
+    if (!Array.isArray(numeros) || numeros.length === 0) {
+      return res.status(400).json({ mensaje: 'Debe seleccionar al menos un número para liberar.' })
+    }
+
+    // Validar que los números estén reservados por el usuario actual
+    const numerosReservados = await numeroRifa.findAll({
+      where: {
+        numero: numeros,
+        usuarioId
+      },
+      transaction: t
+    })
+
+    if (numerosReservados.length !== numeros.length) {
+      const numerosNoReservados = numeros.filter(num => !numerosReservados.map(n => n.numero).includes(num))
+      return res.status(400).json({
+        mensaje: 'Algunos números no están reservados por usted o ya fueron liberados.',
+        numerosNoReservados
+      })
+    }
+
+    // Liberar los números seleccionados
+    await numeroRifa.update(
+      {
+        usuarioId: null,
+        reservadoHasta: null
+      },
+      {
+        where: {
+          numero: numeros
+        },
+        transaction: t
+      })
+
+    await t.commit()
+    res.status(200).json({ mensaje: 'Números liberados exitosamente.', numerosLiberados: numeros })
+  } catch (error) {
+    await t.rollback()
+    res.status(500).json({ mensaje: 'Error al liberar números.' })
+  }
+}
+
+export default { obtenerNumerosRifa, crearNumeroRifa, liberarNumerosExpirados, liberarNumerosManualmente }

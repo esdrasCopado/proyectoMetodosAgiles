@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleccionar Números</title>
+    <style>
+        .container-numbers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .number {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: white;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .number.selected {
+            background-color: #4caf50;
+            border-color: #3e8e41;
+            color: white;
+        }
+
+        .number span {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .btn-submit {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Selecciona Números</h1>
+    <div class="container-numbers" id="containerNumbers">
+        <!-- Números generados dinámicamente -->
+    </div>
+    <button class="btn-submit" id="btnSubmit">Enviar Selección</button>
+
+    <script>
+        // Generar dinámicamente los números
+        const containerNumbers = document.getElementById('containerNumbers');
+        const totalNumbers = 10; // Cambia según la cantidad de números
+        for (let i = 1; i <= totalNumbers; i++) {
+            const div = document.createElement('div');
+            div.classList.add('number');
+            div.innerHTML = `<span>${i}</span>`;
+            containerNumbers.appendChild(div);
+        }
+
+        // Agregar funcionalidad de selección
+        containerNumbers.addEventListener('click', (e) => {
+            const target = e.target.closest('.number');
+            if (target) {
+                target.classList.toggle('selected'); // Cambiar estado seleccionado
+            }
+        });
+
+        // Obtener números seleccionados y enviarlos
+        const btnSubmit = document.getElementById('btnSubmit');
+        btnSubmit.addEventListener('click', () => {
+            const selectedNumbers = Array.from(
+                document.querySelectorAll('.number.selected span')
+            ).map((span) => span.textContent); // Obtener números seleccionados
+            console.log('Números seleccionados:', selectedNumbers);
+
+            // Enviar al backend
+            fetch('/ruta-del-backend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ numeros: selectedNumbers }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log('Respuesta del servidor:', data);
+                })
+                .catch((error) => {
+                    console.error('Error al enviar los números:', error);
+                });
+        });
+    </script>
+</body>
+</html>

@@ -6,7 +6,7 @@ function ocultarAlerta() {
   document.body.classList.remove("alert-active");
 }
 
-function generateNumbers(sorteo) {
+function generateNumbersContainer(sorteo) {
   const alertContainer = document.getElementById("alert-container");
   alertContainer.innerHTML = `
       <div class="alertMesage">
@@ -40,8 +40,21 @@ function generateNumbers(sorteo) {
         </div>
         </div>
       </div>
+      <div class="container-numbers">
+      </div>
 
     </div>
         `;
   mostrarAlerta();
+}
+/**
+ * This function generates a set of numbers based on the given sorteo object.
+ *
+ * @param {Object} numbersSorteo - The sorteo object containing information about the sorteo.
+ * @param {string} sorteo.rangoNumeros - The range of numbers sorteo.
+ *
+ * @returns {void} This function does not return any value.
+ */
+function generationNumbers(sorteo) {
+  // Your implementation here
 }

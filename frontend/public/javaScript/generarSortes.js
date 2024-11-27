@@ -67,7 +67,7 @@ function generarSorteosCart(sorteo) {
   divCard.addEventListener("click", () => {
     console.log(`Card de sorteo con ID ${sorteo.id} clickeada.`);
     // Lógica adicional al hacer clic
-    generateNumbers(sorteo);
+    generateNumbersContainer(sorteo);
   });
 
   // Añadir la card al contenedor

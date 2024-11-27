@@ -27,7 +27,7 @@
     position: absolute;
     top: 30%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -40%);
     z-index: 2; /* Colocar sobre la superposición */
     color: var(--color-text-alert); /* Color de texto para mejor visibilidad */
     display: none; /* Oculto por defecto */
@@ -86,4 +86,14 @@
 body.alert-active .overlay,
 body.alert-active .alertMesage {
     display: block;
+}
+
+@media (max-width:500px) {
+    .alertMesage {
+        width: 95%;
+        
+        transform: translate(-50%, -30%);
+    }
+    
+    
 }

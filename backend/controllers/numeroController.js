@@ -165,4 +165,3 @@ const liberarNumerosManualmente = async (req, res) => {
 }
 
 export default { obtenerNumerosRifa, crearNumeroRifa, liberarNumerosExpirados, liberarNumerosManualmente }
-

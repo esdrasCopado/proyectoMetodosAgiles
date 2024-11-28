@@ -1,10 +1,18 @@
-db_data/
-backend/uploads
-backend/node_modules/
-backend/uploads/
+# Ignorar archivos y carpetas específicos
+
+# Archivos de configuración local
 direccionHost.js
 
+# Ignorar dependencias de Node.js
 node_modules/
+backend/node_modules/
+
+# Ignorar carpetas de subida de archivos
 backend/uploads/
+uploads/
+
+# Ignorar datos persistentes de base de datos
+db_data/
+
 
 

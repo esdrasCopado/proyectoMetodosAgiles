@@ -1,7 +1,7 @@
 import Usuario from '../models/Usuario.js'
 import sequelize from '../config/database.js' // Asegúrate de que esta ruta es correcta
 import jwt from 'jsonwebtoken'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 
 const autenticar = async (req, res) => {
   const { email, password } = req.body

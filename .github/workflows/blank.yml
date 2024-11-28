@@ -6,7 +6,6 @@ on:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
-    
 
 jobs:
   build:
@@ -37,48 +36,29 @@ jobs:
       DB_PORT: 3306
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Limpiar caché de npm
-        run: npm cache clean --force
-
-      - name: Change directory to backend
+      - name: Install dependencies
         working-directory: ./backend
-        run: pwd
+        run: npm ci
 
-      - name: Forzar instalación limpia
-        working-directory: ./backend
+      - name: Wait for MySQL
         run: |
-          rm -rf node_modules package-lock.json
-          npm install
-
-      - name: Actualizar dependencias
-        working-directory: ./backend
-        run: npm update
-
-      - name: Instalar versión estable de minimatch
-        working-directory: ./backend
-        run: npm install minimatch@latest
-
-      - name: Fix permissions for Mocha
-        working-directory: ./backend
-        run: chmod +x ./node_modules/.bin/mocha
-
-      - name: Esperar a que MySQL esté listo
-        run: |
-          until mysqladmin ping -h "$DB_HOST" --silent; do
-            echo "Esperando a MySQL..."
+          until mysqladmin ping -h "$DB_HOST" -u"$DB_USER" -p"$DB_PASSWORD" --silent; do
+            echo "Waiting for MySQL..."
             sleep 1
           done
 
       - name: Run tests
         working-directory: ./backend
         run: npm test
+
 
 
 

@@ -6,8 +6,10 @@ on:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
+    
 
 jobs:
+  
   build:
     runs-on: ubuntu-latest
 
@@ -27,8 +29,8 @@ jobs:
           --health-timeout 5s
           --health-retries 3
 
-    env:
-      DB_HOST: mysql
+    env: 
+      DB_HOST: 127.0.0.1
       DB_NAME: test_db
       DB_USER: test_user
       DB_PASSWORD: test_password
@@ -36,12 +38,13 @@ jobs:
       DB_PORT: 3306
 
     steps:
+      
       - uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
+          node-version: '18'
 
       - name: Change directory to backend
         working-directory: ./backend
@@ -55,23 +58,12 @@ jobs:
         working-directory: ./backend
         run: chmod +x ./node_modules/.bin/mocha
 
-      - name: Clean npm cache
-        working-directory: ./backend
-        run: npm cache clean --force
-
       - name: Esperar a que MySQL esté listo
         run: |
-          max_attempts=30
-          attempt=0
-          until mysqladmin ping -h "$DB_HOST" --silent || [ $attempt -ge $max_attempts ]; do
+          until mysqladmin ping -h "$DB_HOST" --silent; do
             echo "Esperando a MySQL..."
-            attempt=$((attempt + 1))
             sleep 1
           done
-          if [ $attempt -ge $max_attempts ]; then
-            echo "MySQL no está listo, abortando..."
-            exit 1
-          fi
 
       - name: Run tests
         working-directory: ./backend

@@ -66,9 +66,6 @@ export default async function enviarEmail (email, numerosReservados) {
   <body>
     <main>
       <div class="container">
-        <div class="img-container">
-          <blockquote class="imgur-embed-pub" lang="en" data-id="a/CS4aiyZ" data-context="false" ><a href="//imgur.com/a/CS4aiyZ"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
-        </div>
         <div class="content">
           <h1>Notificación: "Nombre del Sorteo"</h1>
           <h4>

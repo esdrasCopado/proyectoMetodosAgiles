@@ -1,7 +1,8 @@
+const url_registro = '/api/v1/users/registrarUsuario'
 async function registrarUsuario(nombre, email, contrasena) {
     console.log(nombre, email, contrasena);
     try {
-        const response = await fetch('http://localhost:3000/api/v1/users/registrarUsuario', {
+        const response = await fetch(hostUrl+url_registro, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

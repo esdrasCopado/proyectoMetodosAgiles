@@ -1,15 +1,10 @@
 db_data/
-<<<<<<< HEAD
-<<<<<<< HEAD
 backend/uploads
-=======
 backend/node_modules/
 backend/uploads/
->>>>>>> 3f7e03d12e55269a1547081be26df3478852f241
-=======
-backend/node_modules/
-backend/uploads/
+direccionHost.js
 
->>>>>>> 7500ac303f64438c31ee1eda4ecc7236e99bb65b
+backend/node_modules/
+backend/uploads/
 
 

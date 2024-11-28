@@ -9,7 +9,6 @@ on:
     
 
 jobs:
-  
   build:
     runs-on: ubuntu-latest
 
@@ -38,7 +37,6 @@ jobs:
       DB_PORT: 3306
 
     steps:
-      
       - uses: actions/checkout@v4
 
       - name: Set up Node.js
@@ -46,13 +44,26 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Limpiar caché de npm
+        run: npm cache clean --force
+
       - name: Change directory to backend
         working-directory: ./backend
         run: pwd
 
-      - name: Install dependencies
+      - name: Forzar instalación limpia
         working-directory: ./backend
-        run: npm install
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install
+
+      - name: Actualizar dependencias
+        working-directory: ./backend
+        run: npm update
+
+      - name: Instalar versión estable de minimatch
+        working-directory: ./backend
+        run: npm install minimatch@latest
 
       - name: Fix permissions for Mocha
         working-directory: ./backend
@@ -68,6 +79,7 @@ jobs:
       - name: Run tests
         working-directory: ./backend
         run: npm test
+
 
 
 

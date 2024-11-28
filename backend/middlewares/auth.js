@@ -1,17 +1,20 @@
 import jwt from 'jsonwebtoken'
 
+// Middleware de autenticación para proteger las rutasimport jwt from 'jsonwebtoken';
+
 // Middleware de autenticación para proteger las rutas
 const verificarToken = (req, res, next) => {
-  // Obtener el token del header de la solicitud
+  // Obtener el token del encabezado 'Authorization'
   const token = req.headers.authorization
 
+  // Verificar si el token existe
   if (!token) {
     return res.status(403).json({ mensaje: 'Acceso denegado. No se proporcionó un token.' })
   }
 
   try {
     // Eliminar el "Bearer " del token, si está presente
-    const tokenSinBearer = token.split(' ')[1]
+    const tokenSinBearer = token.startsWith('Bearer ') ? token.split(' ')[1] : token
 
     // Verificar el token con la clave secreta
     jwt.verify(tokenSinBearer, process.env.JWT_SECRET, (err, decoded) => {

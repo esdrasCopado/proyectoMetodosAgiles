@@ -33,6 +33,10 @@ const autenticar = async (req, res) => {
     res.status(500).json({ mensaje: 'Error interno del servidor' })
   }
 }
+const consultarIdUsuario = async (req, res) => {
+  const usuarioId = req.user.id // Por ejemplo, acceder al ID del usuario
+  res.json({ mensaje: 'Ruta protegida accedida', usuarioId })
+}
 
 const registrar = async (req, res) => {
   const t = await sequelize.transaction() // Creas la transacción aquí
@@ -84,4 +88,4 @@ const registrar = async (req, res) => {
   }
 }
 
-export default { autenticar, registrar }
+export default { autenticar, registrar, consultarIdUsuario }

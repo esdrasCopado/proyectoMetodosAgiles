@@ -1,6 +1,7 @@
 // userRoutes.js
 import express from 'express'
 import userController from '../../controllers/userController.js'
+import verificarToken from '../../middlewares/auth.js'
 
 const route = express.Router()
 
@@ -8,5 +9,6 @@ const route = express.Router()
 route
   .post('/autenticarUsuario', userController.autenticar)
   .post('/registrarUsuario', userController.registrar)
+  .post('/verificarUsuario', verificarToken, userController.consultarIdUsuario)
 
 export default route

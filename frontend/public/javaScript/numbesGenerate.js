@@ -1,5 +1,6 @@
 const url_ConsultarNumerosOcupados = "/api/v1/numeroRifa/numero";
 const url_crearNumero = "/api/v1/numeroRifa/numero";
+const url_consultarIDUser ="/api/v1/users/verificarUsuario"
 
 function mostrarAlerta() {
   document.body.classList.add("alert-active");
@@ -78,6 +79,9 @@ async function numbers(sorteo) {
   const btnNext = document.getElementById("btnNext");
   const btnBack = document.getElementById("btnBack");
   const btnSubmit = document.getElementById("btnSubmit");
+  
+  
+  
 
   const range = sorteo.rangoNumeros;
   const [limiteInferior, limiteSuperior] = range.split("-").map(Number);
@@ -87,7 +91,6 @@ async function numbers(sorteo) {
   // Obtener los números ocupados
   const response = await consultarNumerosOcupados(); // Supone que devuelve el array de objetos
   const numerosNoMostrar = response.map((obj) => obj.numero); // Extraer solo los números
-  console.log("Números ocupados:", numerosNoMostrar);
 
   // Función para renderizar los números de la página actual
   const renderNumbers = () => {
@@ -132,33 +135,79 @@ async function numbers(sorteo) {
   });
 
   // Botón "Submit" para enviar los números seleccionados
-  btnSubmit.addEventListener("click", () => {
+  btnSubmit.addEventListener("click", async () => {
     const selectedNumbers = Array.from(
       document.querySelectorAll(".number.selected span")
-    ).map((span) => span.textContent); // Obtener números seleccionados
-    console.log("Números seleccionados:", selectedNumbers);
-
-    // Enviar al backend
-    fetch("/ruta-del-backend", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ numeros: selectedNumbers }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Respuesta del servidor:", data);
-      })
-      .catch((error) => {
-        console.error("Error al enviar los números:", error);
-      });
+    ).map((span) => Number(span.textContent)); // Convertir a números
+    console.log("Números seleccionados (como números):", selectedNumbers);
+  
+    // Enviar al backend -------------->
+    const id_user = await idUser();
+    apartarNumeros(selectedNumbers,sorteo,id_user);
   });
 
   // Renderizar la primera página al inicio
   renderNumbers();
 }
 
+/**
+ * guarda los numerso seleccionados por el usuario
+ */
+function apartarNumeros(selectedNumbers, sorteo, id_user) {
+  const idSorteo = sorteo.id;
+  // Verificar que se pasen los parámetros correctamente
+  if (!selectedNumbers || !id_user) {
+    console.error('Faltan parámetros necesarios');
+    return;
+  }
+
+  fetch(hostUrl + url_crearNumero, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ 
+      numeros: selectedNumbers, 
+      usuarioId: id_user, // Este es el id del usuario autenticado
+      sorteoId: idSorteo   // Si necesitas usar el idSorteo
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      //se guardo los numeros exitosamente
+      if (data.ok) {
+        alert('Números apartados con éxito');
+        generateNumbersContainer(sorteo)
+      } else {
+        alert('Error al apartar números: ' + data.mensaje); // Agregar mensaje si el backend lo devuelve
+      }
+    })
+    .catch((error) => {
+      console.error("Error al enviar los números:", error);
+      alert('Ocurrió un error. Intenta nuevamente más tarde.');
+    });
+}
+
+
+const idUser = async () => {
+  const token = localStorage.getItem('token'); // O sessionStorage
+  try {
+    const response = await fetch(hostUrl+url_consultarIDUser, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`, // Incluye el token JWT en el encabezado
+      },
+      body: JSON.stringify({ datos: 'ejemplo' }),
+    });
+
+    const data = await response.json();
+    return data.usuarioId; // Devuelve el id del usuario
+
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 
 const consultarNumerosOcupados = async () => {
@@ -167,7 +216,6 @@ const consultarNumerosOcupados = async () => {
       method: "GET",
     });
     const data = await response.json();
-    console.log("Números ocupados:", data);
     return data; // Devuelve los números ocupados
   } catch (error) {
     console.error("Error al consultar los números ocupados:", error);

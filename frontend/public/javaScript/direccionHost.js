@@ -1,6 +1,6 @@
 //direccion publica
-//const hostUrl = 'http://54.144.2.71:3000/';
+const hostUrl = 'https://proyectoitson.com/';
 
 //direccion local
 
-const hostUrl = 'http://localhost:3000';
+//const hostUrl = 'http://localhost:3000';

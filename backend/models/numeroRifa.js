@@ -13,25 +13,42 @@ const NumeroRifa = sequelize.define('NumeroRifa', {
   numero: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true
+    unique: true // Unicidad garantizada
   },
-  usuarioId: { // Usuario que reservó el número
+  usuarioId: {
     type: DataTypes.INTEGER,
-    allowNull: true, // Null si no está reservado
+    allowNull: false, // Mantener la restricción de NOT NULL
     references: {
-      model: 'usuarios', // Nombre de la tabla usuarios
+      model: 'usuarios',
       key: 'id'
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'CASCADE' // Cambiar SET NULL a CASCADE
   },
-  reservadoHasta: { // Tiempo límite de la reserva
+
+  sorteoId: {
+    type: DataTypes.INTEGER,
+    allowNull: false, // Mantener la restricción de NOT NULL
+    references: {
+      model: 'sorteos',
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE' // Cambiar SET NULL a CASCADE
+  },
+  reservadoHasta: { // Fecha límite de la reserva
     type: DataTypes.DATE,
     allowNull: true
   }
 }, {
   timestamps: true,
-  tableName: 'numeros_rifa'
+  tableName: 'numeros_rifa',
+  paranoid: false, // Si deseas soporte para "soft delete"
+  indexes: [
+    { fields: ['usuarioId'] },
+    { fields: ['sorteoId'] },
+    { fields: ['numero'] }
+  ]
 })
 
 export default NumeroRifa

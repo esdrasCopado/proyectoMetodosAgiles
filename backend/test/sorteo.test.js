@@ -7,7 +7,6 @@ import Sorteo from '../models/sorteos.js'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import fs from 'fs/promises'
-import sequelize from '../config/database.js'
 import jwt from 'jsonwebtoken'
 
 // Configurar __dirname manualmente
@@ -17,22 +16,6 @@ const __dirname = path.dirname(__filename)
 describe('controller sorteo', () => {
   describe('crearSorteo', function () {
     this.timeout(5000) // Extender el tiempo de espera en caso de operaciones lentas
-
-    before(async () => {
-      try {
-        // Deshabilitar temporalmente las restricciones de claves foráneas
-        await sequelize.query('SET FOREIGN_KEY_CHECKS = 0', { raw: true })
-
-        // Sincronizar las tablas necesarias
-        await sequelize.sync({ force: true })
-
-        // Volver a habilitar las restricciones de claves foráneas
-        await sequelize.query('SET FOREIGN_KEY_CHECKS = 1', { raw: true })
-      } catch (error) {
-        console.error('Error en la configuración previa a las pruebas:', error.message)
-        throw error
-      }
-    })
 
     afterEach(() => {
       sinon.restore() // Restaurar todos los stubs entre pruebas

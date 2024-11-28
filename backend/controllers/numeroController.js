@@ -1,6 +1,8 @@
 import numeroRifa from '../models/numeroRifa.js'
+import usuarioModel from '../models/Usuario.js'
 import sequelize from '../config/database.js'
 import { Op } from 'sequelize'
+import enviarEmail from '../services/emailNotificacion.js'
 
 /**
  * Obtener los no disponibles
@@ -21,18 +23,85 @@ const obtenerNumerosRifa = async (req, res) => {
       },
       attributes: ['numero'] // Solo devolver el número
     })
-    console.log('Números ocupados:', numerosOcupados)
+    obtenerNumerosAgrupados()
     res.status(200).json(numerosOcupados)
   } catch (error) {
     console.error('Error al obtener los números ocupados:', error)
     res.status(500).json({ mensaje: 'Error al obtener los números ocupados.' })
   }
 }
+/**
+ * se obtiene los numeros que ya vencieron
+ * @param {*} req null
+ * @param {*} res lista de los numeros vencidos
+ */
+async function obtenerNumerosAgrupados () {
+  try {
+    // Obtener números agrupados por usuario
+    const numerosAgrupados = await numeroRifa.findAll({
+      attributes: [
+        'usuarioId',
+        [sequelize.fn('GROUP_CONCAT', sequelize.col('numero')), 'numeros'], // Agrupar números
+        [sequelize.literal('MAX(reservadoHasta)'), 'ultimo_reservado_hasta'] // Última fecha de reserva por grupo
+      ],
+      where: {
+        reservadoHasta: { [Op.lt]: new Date() } // Solo números cuya reserva ya expiró
+      },
+      group: ['usuarioId'] // Agrupar por usuario
+    })
+    eliminarNumerosExpirados(numerosAgrupados)
+  } catch (error) {
+    console.error('Error al obtener números vencidos:', error)
+  }
+}
+async function eliminarNumerosExpirados (numerosAgrupados) {
+  try {
+    for (const grupo of numerosAgrupados) {
+      const { usuarioId, numeros } = grupo.dataValues
+      const numerosArray = numeros.split(',').map(Number) // Convertir la lista de números a un array
+
+      // Buscar el email del usuario
+      const usuario = await usuarioModel.findByPk(usuarioId, {
+        attributes: ['email']
+      })
+
+      if (!usuario) {
+        console.warn(`Usuario con ID ${usuarioId} no encontrado. Números expirados: ${numerosArray}`)
+        continue
+      }
+
+      const { email } = usuario
+      console.log(`Usuario encontrado: ${email}. Eliminando números expirados: ${numerosArray}`)
+      console.log(`Buscando números: ${numerosArray} para usuarioId: ${usuarioId}`)
+
+      // Eliminar los números vencidos
+      const deletedCount = await numeroRifa.destroy({
+        where: {
+          numero: {
+            [Op.in]: numerosArray
+          },
+          usuarioId
+        },
+        logging: console.log // Muestra el query generado
+      })
+
+      if (deletedCount > 0) {
+        console.log(`Registros eliminados: ${deletedCount}`)
+      } else {
+        console.warn(`No se encontraron registros para eliminar con los números: ${numerosArray} y usuarioId: ${usuarioId}`)
+      }
+      // Llamar a enviarEmail con await para esperar su resolución
+      await enviarEmail(email, numerosArray.join(','))
+    }
+  } catch (error) {
+    console.error('Error al eliminar números expirados:', error)
+  }
+}
 
 // Tipo de dato date ajustable
 const tiempoDisponible = () => {
   const today = new Date()
-  const limite = 15 // Tiempo en minutos para la reserva
+  const limite = 1 // Tiempo en minutos para la reserva
   return new Date(today.getTime() + limite * 60000) // Suma 15 minutos al tiempo actual
 }
 
@@ -40,12 +109,9 @@ const tiempoDisponible = () => {
 const crearNumeroRifa = async (req, res) => {
   const t = await sequelize.transaction()
   try {
-    const { numeros, usuarioId } = req.body
+    const { numeros, usuarioId, sorteoId } = req.body
     const reservadoHasta = tiempoDisponible()
-
-    console.log(numeros)
-    console.log(usuarioId)
-    console.log(reservadoHasta)
+    console.log(sorteoId + '------------------------------------------------')
 
     if (!Array.isArray(numeros) || numeros.length === 0) {
       return res.status(400).json({ mensaje: 'Debe seleccionar al menos un número para reservar.' })
@@ -67,6 +133,7 @@ const crearNumeroRifa = async (req, res) => {
         numerosParaCrear.map(n => ({
           numero: n,
           usuarioId,
+          sorteoId,
           reservadoHasta: new Date(reservadoHasta)
         })),
         { transaction: t }
@@ -81,49 +148,6 @@ const crearNumeroRifa = async (req, res) => {
     await t.rollback()
     console.error('Error al reservar números:', error)
     res.status(500).json({ mensaje: 'Error al reservar números.' })
-  }
-}
-const obtenerNumerosAgrupados = async (req, res) => {
-  try {
-    // Obtener números agrupados por usuario
-    const numerosAgrupados = await numeroRifa.findAll({
-      attributes: [
-        'usuarioId',
-        [sequelize.fn('GROUP_CONCAT', sequelize.col('numero')), 'numeros'], // Agrupar números
-        [sequelize.literal('MAX(reservadoHasta)'), 'ultimo_reservado_hasta'] // Última fecha de reserva por grupo
-      ],
-      where: {
-        reservadoHasta: { [Op.lt]: new Date() } // Solo números cuya reserva ya expiró
-      },
-      group: ['usuarioId'] // Agrupar por usuario
-    })
-
-    res.status(200).json(numerosAgrupados)
-  } catch (error) {
-    console.error('Error al obtener números vencidos:', error)
-    res.status(500).json({ mensaje: 'Error al obtener números vencidos.' })
-  }
-}
-
-// Liberar números cuya reserva haya expirado
-const liberarNumerosExpirados = async () => {
-  try {
-    const ahora = new Date()
-
-    // Actualizar los números con reservas expiradas
-    const [cantidadLiberados] = await numeroRifa.update(
-      {
-        usuarioId: null,
-        reservadoHasta: null
-      },
-      {
-        where: {
-          reservadoHasta: { [Op.lte]: ahora } // Liberar los que expiraron
-        }
-      })
-    console.log(`Liberados ${cantidadLiberados} números cuya reserva había expirado.`)
-  } catch (error) {
-    console.error('Error al liberar números expirados:', error)
   }
 }
 
@@ -175,4 +199,4 @@ const liberarNumerosManualmente = async (req, res) => {
   }
 }
 
-export default { obtenerNumerosRifa, crearNumeroRifa, liberarNumerosExpirados, liberarNumerosManualmente, obtenerNumerosAgrupados }
+export default { obtenerNumerosRifa, crearNumeroRifa, liberarNumerosManualmente, obtenerNumerosAgrupados }

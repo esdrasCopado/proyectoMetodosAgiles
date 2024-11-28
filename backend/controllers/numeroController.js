@@ -2,31 +2,38 @@ import numeroRifa from '../models/numeroRifa.js'
 import sequelize from '../config/database.js'
 import { Op } from 'sequelize'
 
-// Obtener los números disponibles para mostrarlos en el frontend
+/**
+ * Obtener los no disponibles
+ * Si el numero existe en la base de datos significa que ya esta ocupado
+ * si la fecha
+ * @param {*} req null
+ * @param {*} res los numeros ocupados
+ */
 const obtenerNumerosRifa = async (req, res) => {
   try {
-    // Buscar números que están disponibles (no reservados o reserva expirada)
-    const numerosDisponibles = await numeroRifa.findAll({
+    // Buscar números que están ocupados y cuya reserva no haya expirado
+    const numerosOcupados = await numeroRifa.findAll({
       where: {
-        [Op.or]: [
-          { reservadoHasta: null }, // Nunca reservados
-          { reservadoHasta: { [Op.lt]: new Date() } } // Reserva expirada
+        [Op.and]: [
+          { reservadoHasta: { [Op.ne]: null } }, // Reservado
+          { reservadoHasta: { [Op.gt]: new Date() } } // Reserva no expirada
         ]
       },
       attributes: ['numero'] // Solo devolver el número
     })
-    res.status(200).json(numerosDisponibles)
+    console.log('Números ocupados:', numerosOcupados)
+    res.status(200).json(numerosOcupados)
   } catch (error) {
-    console.error('Error al obtener los números disponibles:', error)
-    res.status(500).json({ mensaje: 'Error al obtener los números disponibles.' })
+    console.error('Error al obtener los números ocupados:', error)
+    res.status(500).json({ mensaje: 'Error al obtener los números ocupados.' })
   }
 }
 
 // Tipo de dato date ajustable
 const tiempoDisponible = () => {
   const today = new Date()
-  const limite = 5 // Tiempo en minutos para la reserva
-  return new Date(today.getTime() + limite * 60000) // Suma 5 minutos al tiempo actual
+  const limite = 15 // Tiempo en minutos para la reserva
+  return new Date(today.getTime() + limite * 60000) // Suma 15 minutos al tiempo actual
 }
 
 // Crear o reservar números de rifa
@@ -44,23 +51,6 @@ const crearNumeroRifa = async (req, res) => {
       return res.status(400).json({ mensaje: 'Debe seleccionar al menos un número para reservar.' })
     }
 
-    console.log('Comenzando transacción...')
-
-    // Primero, intentamos actualizar los números que ya existen.
-    await numeroRifa.update(
-      {
-        usuarioId,
-        reservadoHasta: new Date(reservadoHasta)
-      },
-      {
-        where: {
-          numero: numeros
-        },
-        transaction: t
-      }
-    )
-
-    // Luego, creamos los números que no existen.
     const numerosExistentes = await numeroRifa.findAll({
       where: {
         numero: numeros
@@ -86,11 +76,32 @@ const crearNumeroRifa = async (req, res) => {
     console.log('Números actualizados y creados, realizando commit...')
     await t.commit()
 
-    res.status(200).json({ mensaje: 'Números reservados exitosamente.', numerosReservados: numeros })
+    res.status(200).json({ ok: true, mensaje: 'Números reservados exitosamente.', numerosReservados: numeros })
   } catch (error) {
     await t.rollback()
     console.error('Error al reservar números:', error)
     res.status(500).json({ mensaje: 'Error al reservar números.' })
+  }
+}
+const obtenerNumerosAgrupados = async (req, res) => {
+  try {
+    // Obtener números agrupados por usuario
+    const numerosAgrupados = await numeroRifa.findAll({
+      attributes: [
+        'usuarioId',
+        [sequelize.fn('GROUP_CONCAT', sequelize.col('numero')), 'numeros'], // Agrupar números
+        [sequelize.literal('MAX(reservadoHasta)'), 'ultimo_reservado_hasta'] // Última fecha de reserva por grupo
+      ],
+      where: {
+        reservadoHasta: { [Op.lt]: new Date() } // Solo números cuya reserva ya expiró
+      },
+      group: ['usuarioId'] // Agrupar por usuario
+    })
+
+    res.status(200).json(numerosAgrupados)
+  } catch (error) {
+    console.error('Error al obtener números vencidos:', error)
+    res.status(500).json({ mensaje: 'Error al obtener números vencidos.' })
   }
 }
 
@@ -164,4 +175,4 @@ const liberarNumerosManualmente = async (req, res) => {
   }
 }
 
-export default { obtenerNumerosRifa, crearNumeroRifa, liberarNumerosExpirados, liberarNumerosManualmente }
+export default { obtenerNumerosRifa, crearNumeroRifa, liberarNumerosExpirados, liberarNumerosManualmente, obtenerNumerosAgrupados }

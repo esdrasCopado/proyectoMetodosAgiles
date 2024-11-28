@@ -15,7 +15,7 @@ const __dirname = path.dirname(__filename)
 
 describe('controller sorteo', () => {
   describe('crearSorteo', function () {
-    this.timeout(5000) // Extender el tiempo de espera en caso de operaciones lentas
+    this.timeout(10000) // Extender el tiempo de espera en caso de operaciones lentas
 
     afterEach(() => {
       sinon.restore() // Restaurar todos los stubs entre pruebas

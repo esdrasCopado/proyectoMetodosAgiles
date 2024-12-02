@@ -1,5 +1,5 @@
 //direccion publica
-//const hostUrl = 'https://proyectoitson.com';
+const hostUrl = 'https://proyectoitson.com';
 
 //direccion local
 

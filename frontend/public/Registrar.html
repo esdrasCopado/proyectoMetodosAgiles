@@ -7,16 +7,16 @@
     <title>Registrar</title>
     <link rel="stylesheet" href="estilos/loginStyle.css">
     <link rel="stylesheet" href="estilos/inputs.css">
+    <link rel="stylesheet" href="estilos/mensageStyle.css">
+
     <script src="javaScript/validarInputs.js"></script>
-    
-    <script src="//unpkg.com/vue@2/dist/vue.js"></script>
-    <script src="//unpkg.com/element-ui@2.15.14/lib/index.js"></script>
-    <script src="javaScript/message.js"></script>
+
+    <script src="javaScript/alertMesage.js"></script>
     <script src="javaScript/direccionHost.js"></script>
     <script src="javaScript/RegistrarUsuario.js"></script>
 </head>
 
-<body>
+<body >
     <div class="container">
 
         <div class="form-container">
@@ -42,7 +42,7 @@
                     </div>
                     <div id="errorEmail"></div>
 
-                    
+
                 </div>
 
 
@@ -64,67 +64,73 @@
 
 
                 <button id="botonSiguiente" type="submit">Siguiente</button>
-                
+
             </form>
 
 
         </div>
     </div>
 
+    <div id="alert-container">
+        <div class="overlay"></div>
+        <div class="alertMesage">
+        </div>
+    </div>
+
     <script>
         let bloqueActual = 1; // 1 para el primer bloque, 2 para el segundo
 
-// Cambia el bloque de código para el evento de clic
-const siguiente = document.getElementById('botonSiguiente');
-siguiente.addEventListener('click', function (e) {
-    e.preventDefault();
-    
-    // Limpiar errores
-    limpiarErrores();
-    
-    // Definir variables del primer bloque fuera de los condicionales
-    const name = document.getElementById('name');
-    const email = document.getElementById('email');
+        // Cambia el bloque de código para el evento de clic
+        const siguiente = document.getElementById('botonSiguiente');
+        siguiente.addEventListener('click', function (e) {
+            e.preventDefault();
 
-    if (bloqueActual === 1) {
-        // Variables del primer bloque
-        const grupo1 = document.getElementById('grupo_1');
-        const grupo2 = document.getElementById('grupo_2');
+            // Limpiar errores
+            limpiarErrores();
 
-        // Valida el primer bloque
-        if (validateName(name) && validateEmail(email)) {
-        
-            // Cambia el bloque
-                grupo1.style.display = 'none';
-                grupo2.style.display = 'block';
-            
-            
+            // Definir variables del primer bloque fuera de los condicionales
+            const name = document.getElementById('name');
+            const email = document.getElementById('email');
 
-            // Llama a registroExitoso desde la instancia de Vue
-            
+            if (bloqueActual === 1) {
+                // Variables del primer bloque
+                const grupo1 = document.getElementById('grupo_1');
+                const grupo2 = document.getElementById('grupo_2');
 
-            bloqueActual = 2; // Cambiamos al bloque 2
+                // Valida el primer bloque
+                if (validateName(name) && validateEmail(email)) {
+
+                    // Cambia el bloque
+                    grupo1.style.display = 'none';
+                    grupo2.style.display = 'block';
+
+
+
+                    // Llama a registroExitoso desde la instancia de Vue
+
+
+                    bloqueActual = 2; // Cambiamos al bloque 2
+                }
+            } else if (bloqueActual === 2) {
+                // Variables del segundo bloque
+                const password1 = document.getElementById('password1');
+                const password2 = document.getElementById('password2');
+
+                // Valida el segundo bloque
+                if (validatePassword(password1, password2)) {
+                    registrarUsuario(name.value, email.value, password1.value);
+                }
+            }
+        });
+
+
+
+
+
+        function limpiarErrores() {
+            document.getElementById('errorEmail').innerHTML = "";
+            document.getElementById('errorContraseña').innerHTML = "";
         }
-    } else if (bloqueActual === 2) {
-        // Variables del segundo bloque
-        const password1 = document.getElementById('password1');
-        const password2 = document.getElementById('password2');
-
-        // Valida el segundo bloque
-        if (validatePassword(password1, password2)) {
-            registrarUsuario(name.value, email.value, password1.value);
-        }
-    }
-});
-
-
-
-
-
-function limpiarErrores() {
-    document.getElementById('errorEmail').innerHTML = "";
-    document.getElementById('errorContraseña').innerHTML = "";
-}
 
     </script>
 </body>

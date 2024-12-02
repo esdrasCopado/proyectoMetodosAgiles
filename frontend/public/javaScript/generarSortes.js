@@ -5,6 +5,10 @@ const url_obtenerSorteo = "/api/v1/sorteo/obtenerSorteo"; // para obtener los so
 async function consultarSorteos() {
     try {
       const token = localStorage.getItem("token");
+
+      if(token==null) {
+        window.location.href= 'index.html';
+      }
       
       // Si el token está presente, agregarlo en los encabezados
       const headers = {

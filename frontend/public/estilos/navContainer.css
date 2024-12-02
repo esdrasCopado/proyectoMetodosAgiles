@@ -1,7 +1,20 @@
-/* estilos header*/
+/* Variables */
+:root {
+    --colorBlanco: #ffffff;
+    --colorPrimario: #4caf50;
+    --colorTexto: #333333;
+    --colorHover: #388e3c;
+    --colorFondoHover: #e0f2f1;
+}
 
+/* Estilo general de la navbar */
 .navbar {
     background-color: var(--colorBlanco);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .navContainer {
@@ -10,38 +23,143 @@
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 10px;
 }
 
-.navbar ul {
-    margin-top: 0;
-    list-style: none;
-    display: flex;
-    padding-right: 20px;
-}
-
-.navbar ul img {
+/* Logo */
+.logo_container img {
     width: 160px;
-    height: 38px;
+    height: auto;
 }
 
-.navbar li {
-    margin-left: 20px;
+/* Enlaces del menú */
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+    align-items: center;
+    margin: 0;
+    padding: 0;
 }
 
-.navbar a {
-    color: black;
+.nav-links li {
+    position: relative;
+}
+
+.nav-links a {
+    color: var(--colorTexto);
     font-weight: 600;
     text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
 }
 
-
-.navbar a:hover {
-    text-decoration: underline;
+.nav-links a:hover {
+    background-color: var(--colorFondoHover);
+    color: var(--colorHover);
 }
-.logo{
-    font-size: 1.3rem;
-    font-weight: 700;
-    transition: color 0.3s ease;
+
+/* Menú desplegable para "Usuario" */
+.dropdown {
+    position: relative;
+}
+
+/* Menú desplegable */
+.dropdown-menu {
+    display: none; /* Oculto por defecto */
+    position: absolute;
+    top: 100%; /* Aparece justo debajo del enlace */
+    left: 0;
+    background-color: var(--colorBlanco);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    margin: 0;
+    padding: 0; /* Ajusta el padding general */
+    border-radius: 8px;
+    min-width: 150px; /* Ajusta el ancho mínimo */
+    max-width: 200px; /* Establece un ancho máximo */
+    width: 100%; /* Hace que el ancho coincida con el contenedor */
+    z-index: 1001;
+}
+
+.dropdown-menu li {
+    padding: 0; /* Elimina el padding del li */
+    text-align: left; /* Asegura que el texto esté alineado a la izquierda */
+}
+
+.dropdown-menu li a {
+    color: var(--colorTexto);
     text-decoration: none;
+    font-weight: 500;
+    display: block; /* Ocupa toda la línea */
+    padding: 10px 20px; /* Espaciado interno uniforme */
+    transition: all 0.3s ease;
+    border-radius: 0; /* Quita cualquier redondeo para mantener el diseño limpio */
+    width: 100%; /* Ocupa todo el contenedor */
+    box-sizing: border-box; /* Asegura que padding no desborde el ancho */
 }
+
+.dropdown-menu li a:hover {
+    background-color: var(--colorFondoHover); /* Color de fondo al pasar el cursor */
+    color: var(--colorHover);
+}
+
+
+
+
+
+/* Mostrar menú desplegable */
+.dropdown.show .dropdown-menu {
+    display: block;
+}
+
+/* Icono de perfil */
+.profile-icon svg {
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.profile-icon svg:hover {
+    color: var(--colorHover);
+}
+
+/* Menú hamburguesa */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+}
+
+.hamburger span {
+    width: 30px;
+    height: 3px;
+    background-color: var(--colorTexto);
+    transition: all 0.3s ease;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: var(--colorBlanco);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 10px 20px;
+        width: 200px;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+}
+

@@ -18,6 +18,10 @@ const Sorteo = sequelize.define('Sorteo', {
     type: DataTypes.STRING,
     allowNull: false
   },
+  costoVoleto: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: false
+  },
   rangoNumeros: {
     type: DataTypes.STRING,
     allowNull: false

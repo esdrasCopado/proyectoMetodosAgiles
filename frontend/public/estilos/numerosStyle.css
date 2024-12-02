@@ -1,0 +1,103 @@
+:root {
+    --color-overlay: rgba(0, 0, 0, 0.5);
+    --color-alert: #ffffff;
+    --color-text-alert: #000000;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; /* Asegura que cubre toda la pantalla horizontalmente */
+    height: 100vh; /* Asegura que cubre toda la pantalla verticalmente */
+    background-color: var(--color-overlay); /* Color para oscurecer el fondo */
+    backdrop-filter: blur(5px); /* Efecto de desenfoque */
+    display: none; /* Oculto por defecto */
+    z-index: 1000; /* Asegúrate de que está detrás de .alertMesage */
+}
+
+/* Mensaje de alerta personalizado */
+.alertMesage {
+    width: 400px;
+    max-width: 90%;
+    background-color: var(--color-alert);
+    display: flex;
+    justify-content: center;
+    border-radius: 11px;
+    align-items: center;
+    position: fixed; /* Usamos fixed para asegurar que se centra en toda la pantalla */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centrado perfecto */
+    z-index: 1001; /* Debe estar sobre la superposición */
+    color: var(--color-text-alert);
+    display: none; /* Oculto por defecto */
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra para mayor enfoque */
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.image-container img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    max-width: 300px;
+    border-radius: 5px;
+}
+
+.mesage {
+    font-size: 1.2rem;
+    font-weight: 400;
+    text-align: center;
+}
+
+.input-user {
+    margin: 10px 0 0 0;
+}
+
+/* Ajustar el estilo del botón de cierre */
+.close {
+    width: 3rem;
+    height: 3rem;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--color-text-alert);
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.close:hover {
+    color: red; /* Cambia el color al pasar el mouse */
+    transform: scale(1.1); /* Aumenta ligeramente el tamaño */
+}
+
+/* Ajusta el contenedor div del botón close */
+.buttonClose {
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* Mostrar alerta y superposición cuando sea necesario */
+body.alert-active .overlay,
+body.alert-active .alertMesage {
+    display: block; /* Muestra la superposición y el mensaje */
+}
+
+@media (max-width: 500px) {
+    .alertMesage {
+        width: 95%;
+        padding: 15px;
+        transform: translate(-50%, -30%);
+    }
+}

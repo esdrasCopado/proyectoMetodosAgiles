@@ -2,41 +2,32 @@ const url_registro = '/api/v1/users/registrarUsuario'
 async function registrarUsuario(nombre, email, contrasena) {
     console.log(nombre, email, contrasena);
     try {
-        const response = await fetch(hostUrl+url_registro, {
+        const response = await fetch(hostUrl + url_registro, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                nombre,
-                email,
-                contrasena // No es necesario repetir 'contrasena: contrasena', se puede usar solo 'contrasena'
-            })
+            body: JSON.stringify({ nombre, email, contrasena }),
         });
 
-        // Verificar si la solicitud fue exitosa
         if (!response.ok) {
             const errorData = await response.json();
             throw new Error(`Error ${response.status}: ${errorData.message || 'Ocurrió un error desconocido'}`);
         }
 
-        // Procesar la respuesta si es exitosa
         const data = await response.json();
-        
-        // Si la respuesta indica éxito, llama a registroExitoso
-        appInstance.registroExitoso();
-        
-        // Redirigir a otra página después de un retardo de 2 segundos
-        setTimeout(() => {
-            window.location.href = 'index.html'; // Cambia esto por la URL a la que deseas redirigir
-        }, 3000);
 
+        // Mostrar alerta y esperar a que el usuario la cierre
+        await generateAlert('Registro exitoso');
+
+        // Redirigir después de que el usuario cierra la alerta
+        window.location.href = 'index.html';
     } catch (error) {
         console.error('Error al registrar usuario:', error.message);
-        // Puedes mostrar un mensaje al usuario aquí si lo deseas
-        appInstance.open4(); // Mostrar mensaje de error en el UI
     }
 }
+
+
 
 // Código de Vue
 var Main = {

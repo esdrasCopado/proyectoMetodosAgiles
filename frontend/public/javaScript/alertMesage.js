@@ -1,28 +1,43 @@
-function mostrarAlerta() {
-    document.body.classList.add('alert-active');
-  }
+function ocultarAlerta() {
+  document.body.classList.remove('alert-active'); // Quitar la clase que muestra la alerta
+  const alertContainer = document.getElementById('alert-container');
+  alertContainer.innerHTML = ''; // Limpia el contenido de la alerta
+}
 
-  function ocultarAlerta() {
-  document.body.classList.remove('alert-active');
-  }
+function generateAlert(message) {
+  return new Promise((resolve) => {
+      const alertContainer = document.getElementById('alert-container');
 
-  function generateAlert(message){
-    const alertContainer = document.getElementById('alert-container');
-    alertContainer.innerHTML = `
-      <div class="alertMesage">
-      <div class="buttonClose">
-        <button class="close" onclick="ocultarAlerta()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-x">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
-       
-      </div>
-      
-        <div class="mesage"><p>${message}</p></div>
-    </div>
-        `
-        mostrarAlerta();
+      // Generar el contenido dinámico de la alerta
+      alertContainer.innerHTML = `
+          <div class="overlay"></div>
+          <div class="alertMesage">
+              <div class="buttonClose">
+                  <button class="close">×</button>
+              </div>
+              <div class="mesage">
+                  <p>${message}</p>
+              </div>
+          </div>
+      `;
 
-  }
+      // Referencias a los elementos creados
+      const overlay = alertContainer.querySelector('.overlay');
+      const closeButton = alertContainer.querySelector('.close');
+
+      // Función para ocultar la alerta y resolver la promesa
+      function resolvePromise() {
+          ocultarAlerta();
+          resolve(); // Resolver la promesa
+      }
+
+      // Asignar eventos para cerrar la alerta
+      overlay.addEventListener('click', resolvePromise);
+      closeButton.addEventListener('click', resolvePromise);
+
+      // Mostrar la alerta
+      document.body.classList.add('alert-active');
+  });
+}
+
+

@@ -96,8 +96,13 @@ body.alert-active .alertMesage {
 
 @media (max-width: 500px) {
     .alertMesage {
-        width: 95%;
+        padding: 0;
+        width: 85%;
         padding: 15px;
-        transform: translate(-50%, -30%);
+        transform: translate(-50%, -50%);
+    }
+    .buttonClose{
+        top: 2px;
+        right: -4px;
     }
 }

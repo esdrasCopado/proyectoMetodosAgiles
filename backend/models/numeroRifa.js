@@ -15,6 +15,10 @@ const NumeroRifa = sequelize.define('NumeroRifa', {
     allowNull: false,
     unique: true // Unicidad garantizada
   },
+  estado: {
+    type: DataTypes.ENUM('APARTADO', 'PAGADO'),
+    defaultValue: 'APARTADO' // Estado por defecto en caso de no especificar
+  },
   usuarioId: {
     type: DataTypes.INTEGER,
     allowNull: false, // Mantener la restricción de NOT NULL

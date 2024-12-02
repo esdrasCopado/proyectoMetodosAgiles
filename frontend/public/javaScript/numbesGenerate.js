@@ -1,6 +1,6 @@
 const url_ConsultarNumerosOcupados = "/api/v1/numeroRifa/numero";
 const url_crearNumero = "/api/v1/numeroRifa/numero";
-const url_consultarIDUser ="/api/v1/users/verificarUsuario"
+const url_consultarIDUser = "/api/v1/users/verificarUsuario";
 
 function mostrarAlerta() {
   document.body.classList.add("alert-active");
@@ -23,31 +23,18 @@ function generateNumbersContainer(sorteo) {
         </button>
       </div>
       <div class="container-sorteo">
+
       <div class="image-container">
         <img src="${hostUrl + "/" + sorteo.ulrImagenSorteo}" alt="${
     sorteo.nombreSorteo
   }">
       </div>
       <div class="mesage">
-      <span class="Title-sorteo">Escoge los números de: ${
-        sorteo.nombreSorteo
-      }</span>
-      </div>
-      <div class="container-input">
-        <div class="input-user">
-          <div  class="input-user">
-            <input id ="buscar-numero"
-              required="true"
-              type="text"
-              name="text"
-              autocomplete="off"
-              class="input"
-            />
-            <label class="user-label">Busca un numero</label>
-          </div>
-        </div>
-        </div>
-      </div>
+<div class="container-info">
+    <span class="Title-sorteo">${sorteo.nombreSorteo}</span>
+    <span class="Subtitle-sorteo">Costo de los boletos: ${sorteo.costoVoleto}</span>
+</div>
+
 
       <div class="container-numbers" id="containerNumbers">
         <!-- Números generados dinámicamente -->
@@ -79,9 +66,6 @@ async function numbers(sorteo) {
   const btnNext = document.getElementById("btnNext");
   const btnBack = document.getElementById("btnBack");
   const btnSubmit = document.getElementById("btnSubmit");
-  
-  
-  
 
   const range = sorteo.rangoNumeros;
   const [limiteInferior, limiteSuperior] = range.split("-").map(Number);
@@ -140,10 +124,10 @@ async function numbers(sorteo) {
       document.querySelectorAll(".number.selected span")
     ).map((span) => Number(span.textContent)); // Convertir a números
     console.log("Números seleccionados (como números):", selectedNumbers);
-  
+
     // Enviar al backend -------------->
     const id_user = await idUser();
-    apartarNumeros(selectedNumbers,sorteo,id_user);
+    apartarNumeros(selectedNumbers, sorteo, id_user);
   });
 
   // Renderizar la primera página al inicio
@@ -157,7 +141,7 @@ function apartarNumeros(selectedNumbers, sorteo, id_user) {
   const idSorteo = sorteo.id;
   // Verificar que se pasen los parámetros correctamente
   if (!selectedNumbers || !id_user) {
-    console.error('Faltan parámetros necesarios');
+    console.error("Faltan parámetros necesarios");
     return;
   }
 
@@ -166,49 +150,46 @@ function apartarNumeros(selectedNumbers, sorteo, id_user) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ 
-      numeros: selectedNumbers, 
+    body: JSON.stringify({
+      numeros: selectedNumbers,
       usuarioId: id_user, // Este es el id del usuario autenticado
-      sorteoId: idSorteo   // Si necesitas usar el idSorteo
+      sorteoId: idSorteo, // Si necesitas usar el idSorteo
     }),
   })
     .then((response) => response.json())
     .then((data) => {
       //se guardo los numeros exitosamente
       if (data.ok) {
-        alert('Números apartados con éxito');
-        generateNumbersContainer(sorteo)
+        alert("Números apartados con éxito");
+        generateNumbersContainer(sorteo);
       } else {
-        alert('Error al apartar números: ' + data.mensaje); // Agregar mensaje si el backend lo devuelve
+        alert("Error al apartar números: " + data.mensaje); // Agregar mensaje si el backend lo devuelve
       }
     })
     .catch((error) => {
       console.error("Error al enviar los números:", error);
-      alert('Ocurrió un error. Intenta nuevamente más tarde.');
+      alert("Ocurrió un error. Intenta nuevamente más tarde.");
     });
 }
 
-
 const idUser = async () => {
-  const token = localStorage.getItem('token'); // O sessionStorage
+  const token = localStorage.getItem("token"); // O sessionStorage
   try {
-    const response = await fetch(hostUrl+url_consultarIDUser, {
-      method: 'POST',
+    const response = await fetch(hostUrl + url_consultarIDUser, {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`, // Incluye el token JWT en el encabezado
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Incluye el token JWT en el encabezado
       },
-      body: JSON.stringify({ datos: 'ejemplo' }),
+      body: JSON.stringify({ datos: "ejemplo" }),
     });
 
     const data = await response.json();
     return data.usuarioId; // Devuelve el id del usuario
-
   } catch (error) {
     console.error(error);
   }
 };
-
 
 const consultarNumerosOcupados = async () => {
   try {

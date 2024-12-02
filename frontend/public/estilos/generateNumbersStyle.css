@@ -1,28 +1,36 @@
+/* General */
 .container-numbers {
     display: grid;
     grid-template-columns: repeat(4, 65px);
-    grid-gap: 10px;
+    grid-gap: 15px; /* Mayor espacio entre números */
     justify-content: center;
-    margin: 10px 0 0 0;
+    margin: 15px 0;
 }
 
 .number {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
     border: 2px solid #ccc;
-    border-radius: 5px;
+    border-radius: 8px; /* Bordes más suaves */
     cursor: pointer;
     background-color: white;
-    transition: background-color 0.3s, border-color 0.3s;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.number:hover {
+    background-color: #f1f1f1;
+    border-color: #007bff;
 }
 
 .number.selected {
     background-color: #4caf50;
     border-color: #3e8e41;
     color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Resalta el número seleccionado */
 }
 
 .number span {
@@ -30,47 +38,172 @@
     font-weight: bold;
 }
 
+/* Botones */
 .btn-submit {
     margin-top: 20px;
-    padding: 10px 20px;
+    padding: 12px 24px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .btn-submit:hover {
     background-color: #0056b3;
+    transform: scale(1.05); /* Pequeño efecto de zoom */
 }
 
-.btns-container{
+.btn-submit:focus {
+    outline: 2px solid #0056b3;
+}
+
+/* Contenedor de botones de paginación */
+.btns-container {
     display: flex;
-    justify-content:center;
-    margin-top: 15px;
-}
-#btnBack{
-    margin-right: 10px;
-}
-#btnNext{
-    margin-left: 10px;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 10px; /* Espacio uniforme entre botones */
 }
 
-#btnBack, #btnNext{
-    width: 100px;
+#btnBack,
+#btnNext {
+    width: 120px;
     height: 40px;
     background-color: white;
     color: black;
-    border: none;
+    border: 1px solid #ccc;
     border-radius: 5px;
     cursor: pointer;
-}
-#btnBack:hover, #btnNext:hover{
-    background-color: #007bff;
-    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.btnSumbit-Container{
+#btnBack:hover,
+#btnNext:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+#btnBack:focus,
+#btnNext:focus {
+    outline: 2px solid #007bff;
+}
+
+/* Botón cerrar */
+.buttonClose {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.close {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #333;
+    transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.close:hover {
+    transform: scale(1.2);
+    color: #e53935;
+}
+
+.close:focus {
+    outline: none;
+    color: #e53935;
+}
+
+/* Contenedor principal */
+.alertMesage {
+    width: 400px;
+    max-width: 95%;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Entrada de búsqueda */
+.container-input .input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.container-input .input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.user-label {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Contenedor de los textos */
+.container-info {
+    text-align: center; /* Centra el contenido */
+    margin: 20px 0;
+}
+
+/* Estilo del título principal */
+.Title-sorteo {
+    font-size: 1.5rem; /* Tamaño más grande */
+    font-weight: 700; /* Texto más grueso */
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Línea decorativa */
+.Title-sorteo::after {
+    content: "";
+    display: block;
+    width: 60%;
+    height: 2px;
+    background-color: #4caf50; /* Color destacado */
+    margin: 10px auto 0;
+    border-radius: 5px;
+}
+
+/* Estilo del subtítulo */
+.Subtitle-sorteo {
+    font-size: 1.2rem; /* Tamaño más pequeño que el título */
+    font-weight: 400; /* Texto normal */
+    color: #555;
+    margin-top: 10px;
+}
+
+/* Animación */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -55%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Botón enviar selección */
+.btnSumbit-Container {
     display: flex;
     justify-content: center;
     align-items: center;

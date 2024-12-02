@@ -29,48 +29,6 @@ async function registrarUsuario(nombre, email, contrasena) {
 
 
 
-// Código de Vue
-var Main = {
-    methods: {
-        open1() {
-            this.$message({
-                showClose: true,
-                message: 'This is a message.'
-            });
-        },
 
-        open2() {
-            this.$message({
-                showClose: true,
-                message: 'Usuario Registrado',
-                type: 'success'
-            });
-        },
-
-        open3() {
-            this.$message({
-                showClose: true,
-                message: 'Warning, this is a warning message.',
-                type: 'warning'
-            });
-        },
-
-        open4() {
-            this.$message({
-                showClose: true,
-                message: 'Oops, this is an error message.',
-                type: 'error'
-            });
-        },
-
-        registroExitoso() {
-            this.open2(); // Llama a open2 para mostrar mensaje de éxito
-        }
-    }
-}
-
-// Crea una instancia de Vue
-var appInstance = new Vue(Main);
-appInstance.$mount('#app');
 
 

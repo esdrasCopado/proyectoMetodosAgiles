@@ -8,6 +8,7 @@ const nombre = document.getElementById('nombre_sorteo');
 const RangoNumeros = document.getElementById('RangoNumeros');
 const fechaInicio = document.getElementById('fechaInicio');
 const fechaFin = document.getElementById('fechaFin');
+const costoNumero = document.getElementById('CostoNumero');
 
 //urls for the endpoins of the api service
 const url_createSorteo = '/api/v1/sorteo/Crearsorteo';
@@ -106,6 +107,7 @@ async function uploadFile() {
     formData.append('fechaInicioSorteo', fechaInicio.value);
     formData.append('fechaFinSorteo', fechaFin.value);
     formData.append('imagenSorteo', file);
+    formData.append('costoNumero', costoNumero.value);
     
     
 
@@ -130,11 +132,13 @@ async function uploadFile() {
         if (response.ok) {
             const result = await response.json();
             console.log(result);
-            generateAlert(result.message); // Mostrar el mensaje de éxito o resultado
+            await generateAlert(result.message); // Mostrar el mensaje de éxito o resultado
+            window.location.href = 'home.html';
         } else {
             const errorResult = await response.json(); // Extraer el mensaje de error
             console.error("Error en la respuesta del servidor");
-            generateAlert(errorResult.message); // Mostrar el mensaje de error
+            await generateAlert(errorResult.message); // Mostrar el mensaje de error
+            window.location.reload()
         }
     } catch (error) {
         console.error("Error en la solicitud:", error);

@@ -30,6 +30,14 @@ const crearSorteo = async (req, res) => {
     }
 
     const file = req.files.imagenSorteo
+    const costoNumero = req.body.costoNumero
+
+    if (!costoNumero) {
+      return res.status(400).send({ message: 'Debe ingresar el costo del voleto.' })
+    }
+    if (isNaN(costoNumero) || costoNumero < 0) {
+      return res.status(400).send({ message: 'El costo del voleto debe ser un número positivo.' })
+    }
 
     // Verificar y guardar la imagen
     try {
@@ -57,13 +65,13 @@ const crearSorteo = async (req, res) => {
       {
         nombreSorteo: req.body.nombreSorteo,
         ulrImagenSorteo: imagenPath,
+        costoVoleto: costoNumero,
         rangoNumeros: req.body.rangoNumeros,
         fechaInicioSorteo: fechaInicio,
         fechaFinSorteo: fechaFin
       },
       t
     )
-
     await t.commit()
     res
       .status(200)

@@ -45,43 +45,14 @@
 
     <main>
         <div id="contenedorNumeros" class="contenedorSorteos">
-            <!-- Tarjeta para un número -->
-            <div class="cardSorteo" id="20">
-                <img src="http://localhost:3000/uploads\fotoSorteo.jpg" alt="">
-                <h4>Nombre Sorteo</h4>
-                <h5>Número: 20</h5>
-                <p>Costo Total: $50.00</p>
-                <div class="boton-pagar">
-                    <button class="btnPagar" onclick="pagarNumero(20)">
-                        <span>Pagar</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet-fill" viewBox="0 0 16 16">
-                            <path d="M0 3a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2H0zm0 2h15a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H0V5z"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-    
-            <div class="cardSorteo" id="20">
-                <img src="http://localhost:3000/uploads\fotoSorteo.jpg" alt="">
-                <h4>Nombre Sorteo</h4>
-                <h5>Número: 20</h5>
-                <p>Costo Total: $50.00</p>
-                <div class="boton-pagar">
-                    <button class="btnPagar" onclick="pagarNumero(20)">
-                        <span>Pagar</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet-fill" viewBox="0 0 16 16">
-                            <path d="M0 3a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2H0zm0 2h15a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H0V5z"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
         </div>
     </main>
     
     
 
+    <script src="javaScript/direccionHost.js"></script>
     <script src="javaScript/header.js"></script>
+    <script src="javaScript/generarSorteosPago.js"></script>
     <script>
         function pagarNumero(numero) {
     const confirmacion = confirm(`¿Estás seguro de que deseas pagar el número ${numero}?`);

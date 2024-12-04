@@ -5,7 +5,7 @@ import fs from 'fs'
 import sharp from 'sharp'
 
 export async function verificarImagen (file) {
-  const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif']
+  const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
   if (!allowedMimeTypes.includes(file.mimetype)) {
     throw new Error('Tipo de imagen no válido.')
   }

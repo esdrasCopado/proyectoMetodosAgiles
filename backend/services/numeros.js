@@ -3,7 +3,8 @@ import sequelize from '../config/database.js'
 import numeroRifa from '../models/numeroRifa.js'
 import usuarioModel from '../models/Usuario.js'
 import { tiempoDisponible } from './tiempoDisponible.js'
-import enviarEmail from './emailNotificacion.js'
+// import enviarEmail from './emailNotificacion.js'
+import Sorteo from '../models/sorteos.js'
 
 /**
  * Obtener los números ocupados
@@ -18,6 +19,57 @@ export const obtenerNumerosOcupadosService = async () => {
     },
     attributes: ['numero']
   })
+}
+
+/**
+ * Servicio para obtener detalles de los sorteos en los que un usuario ha apartado números
+ */
+export const obtenerDetallesSorteosUsuarioService = async (usuarioId) => {
+  try {
+    const sorteos = await Sorteo.findAll({
+      include: [
+        {
+          model: numeroRifa,
+          as: 'numeroRifas', // Alias de la relación
+          where: {
+            usuarioId,
+            estado: 'APARTADO' // Solo números apartados
+          },
+          attributes: ['numero'] // Solo se necesita el número
+        }
+      ],
+      attributes: [
+        'id',
+        'nombreSorteo',
+        'ulrImagenSorteo',
+        'costoVoleto',
+        'fechaInicioSorteo',
+        'fechaFinSorteo'
+      ]
+    })
+
+    // Formatear los datos para devolverlos en un formato claro
+    const resultados = sorteos.map((sorteo) => {
+      const numeros = sorteo.numeroRifas.map((n) => n.numero)
+      const costoTotal = numeros.length * parseFloat(sorteo.costoVoleto) // Calcular el costo total
+
+      return {
+        id: sorteo.id,
+        nombreSorteo: sorteo.nombreSorteo,
+        ulrImagenSorteo: sorteo.ulrImagenSorteo,
+        costoVoleto: parseFloat(sorteo.costoVoleto),
+        fechaInicioSorteo: sorteo.fechaInicioSorteo,
+        fechaFinSorteo: sorteo.fechaFinSorteo,
+        numeros,
+        costoTotal // Costo total calculado
+      }
+    })
+
+    return resultados
+  } catch (error) {
+    console.error('Error al obtener detalles de sorteos por usuario:', error)
+    throw new Error('No se pudo obtener la información de los sorteos.')
+  }
 }
 
 /**
@@ -58,7 +110,7 @@ export const eliminarNumerosExpiradosService = async (usuarioId, numerosArray) =
     return
   }
 
-  const { email } = usuario
+  // const { email } = usuario
 
   // Eliminar números con estado APARTADO
   const deletedCount = await numeroRifa.destroy({
@@ -71,7 +123,7 @@ export const eliminarNumerosExpiradosService = async (usuarioId, numerosArray) =
 
   if (deletedCount > 0) {
     console.log(`Registros eliminados: ${deletedCount}`)
-    await enviarEmail(email, `Los siguientes números expiraron: ${numerosArray.join(', ')}`)
+    // await enviarEmail(email, `Los siguientes números expiraron: ${numerosArray.join(', ')}`)
   } else {
     console.warn(`No se encontraron registros para eliminar para usuarioId: ${usuarioId}`)
   }

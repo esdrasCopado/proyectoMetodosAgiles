@@ -8,6 +8,10 @@ import Sorteo from './sorteos.js'
 Comprobante.hasMany(NumeroRifa, { foreignKey: 'comprobanteId' })
 NumeroRifa.belongsTo(Comprobante, { foreignKey: 'comprobanteId' })
 
+// Relación entre Sorteo y NumeroRifa
+Sorteo.hasMany(NumeroRifa, { foreignKey: 'sorteoId', as: 'numeroRifas' }) // Un sorteo tiene muchos números de rifa
+NumeroRifa.belongsTo(Sorteo, { foreignKey: 'sorteoId', as: 'sorteo' }) // Un número de rifa pertenece a un sorteo
+
 // Exportar los modelos y la instancia de Sequelize
 const db = {
   sequelize,

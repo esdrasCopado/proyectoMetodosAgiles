@@ -3,7 +3,8 @@ import {
   obtenerNumerosAgrupadosService,
   reservarNumerosService,
   liberarNumerosService,
-  obtenerDetallesSorteosUsuarioService
+  obtenerDetallesSorteosUsuarioService,
+  pagarNumerosService
 } from '../services/numeros.js'
 
 /**
@@ -45,6 +46,53 @@ const obtenerDetallesSorteosUsuario = async (req, res) => {
 }
 
 /**
+ * pagar una lista de numeros apartados por el usuario
+ * el usuario subira la imagen del comprobante del pago
+ * para que despues se cambie el estado de APARTADO a PAGADO
+ * y se se creara un registro nuevo de Comprobante en la base de
+ * datos y se agregara el id del comprobante al numero rifa en la
+ * parte de numero id
+ * @param {Array} numerosDelUsuario
+ * @param usuarioID
+ * @file la imagen
+ */
+const pagarNumeros = async (req, res) => {
+  try {
+    let { numeros, usuarioId } = req.body
+    const file = req.files?.imagenComprobante
+    if (!Array.isArray(numeros)) {
+      if (typeof numeros === 'string') {
+        // Si es una cadena separada por comas
+        numeros = numeros.split(',').map(num => parseInt(num.trim(), 10))
+      } else {
+        // Si no es un array o cadena, convertir en un array único
+        numeros = [numeros]
+      }
+    }
+
+    // Validación de datos
+    if (!numeros || !Array.isArray(numeros) || numeros.length === 0) {
+      return res.status(400).json({ mensaje: 'Debe proporcionar una lista de números.' })
+    }
+
+    if (!usuarioId) {
+      return res.status(400).json({ mensaje: 'Debe proporcionar el ID del usuario.' })
+    }
+
+    if (!file) {
+      return res.status(400).json({ mensaje: 'Debe subir una imagen del comprobante.' })
+    }
+
+    // Llamar al servicio
+    const resultado = await pagarNumerosService(file, numeros, usuarioId)
+    res.status(200).json(resultado)
+  } catch (error) {
+    console.error('Error al pagar números:', error)
+    res.status(500).json({ mensaje: 'Error al procesar el pago.', error: error.message })
+  }
+}
+
+/**
  * Crear o reservar números de rifa
  */
 const crearNumeroRifa = async (req, res) => {
@@ -70,4 +118,4 @@ const liberarNumerosManualmente = async (req, res) => {
   }
 }
 
-export default { obtenerNumerosRifa, crearNumeroRifa, liberarNumerosManualmente, obtenerDetallesSorteosUsuario }
+export default { obtenerNumerosRifa, crearNumeroRifa, liberarNumerosManualmente, obtenerDetallesSorteosUsuario, pagarNumeros }

@@ -3,8 +3,59 @@ import sequelize from '../config/database.js'
 import numeroRifa from '../models/numeroRifa.js'
 import usuarioModel from '../models/Usuario.js'
 import { tiempoDisponible } from './tiempoDisponible.js'
+import { verificarImagen, guardarImagen } from '../services/imageService.js'
+import Comprobante from '../models/Comprobante.js'
 // import enviarEmail from './emailNotificacion.js'
 import Sorteo from '../models/sorteos.js'
+
+export const pagarNumerosService = async (file, numeros, usuarioId) => {
+  const t = await sequelize.transaction() // Crear transacción
+  try {
+    // Verificar y guardar la imagen del comprobante
+    await verificarImagen(file) // Validar el tipo y dimensiones de la imagen
+    const filePath = await guardarImagen(file) // Guardar la imagen y obtener la URL
+
+    // Crear un registro de comprobante en la base de datos
+    const comprobanteGuardado = await Comprobante.create(
+      {
+        url: filePath,
+        descripcion: 'Comprobante de pago'
+      },
+      { transaction: t }
+    )
+
+    // Actualizar los números de rifa
+    const [updatedRows] = await numeroRifa.update(
+      {
+        estado: 'PAGADO',
+        comprobanteId: comprobanteGuardado.id
+      },
+      {
+        where: {
+          numero: numeros,
+          usuarioId,
+          estado: 'APARTADO' // Asegurarse de que el estado sea APARTADO
+        },
+        transaction: t
+      }
+    )
+
+    if (updatedRows === 0) {
+      throw new Error('No se encontraron números para actualizar.')
+    }
+
+    await t.commit() // Confirmar la transacción
+    return {
+      mensaje: 'Números pagados exitosamente.',
+      comprobanteId: comprobanteGuardado.id,
+      urlComprobante: comprobanteGuardado.url
+    }
+  } catch (error) {
+    await t.rollback() // Revertir la transacción en caso de error
+    console.error('Error en pagarNumerosService:', error)
+    throw new Error('Error al procesar el pago.')
+  }
+}
 
 /**
  * Obtener los números ocupados

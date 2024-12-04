@@ -4,7 +4,8 @@ import {
   reservarNumerosService,
   liberarNumerosService,
   obtenerDetallesSorteosUsuarioService,
-  pagarNumerosService
+  pagarNumerosService,
+  obtenerDetallesSorteoPagadoService
 } from '../services/numeros.js'
 
 /**
@@ -42,6 +43,28 @@ const obtenerDetallesSorteosUsuario = async (req, res) => {
     res.status(200).json(detalles)
   } catch (error) {
     res.status(500).json({ mensaje: error.message || 'Error al obtener detalles de sorteos.' })
+  }
+}
+
+/**
+ * Controlador para obtener la lista de los sorteos pagados según el usuario
+ */
+const obtenerSorteosPagados = async (req, res) => {
+  try {
+    const { usuarioId } = req.body
+
+    // Validar entrada
+    if (!usuarioId) {
+      return res.status(400).json({ mensaje: 'Debe proporcionar el ID del usuario.' })
+    }
+
+    // Llamar al servicio para obtener los sorteos pagados
+    const sorteosPagados = await obtenerDetallesSorteoPagadoService(usuarioId)
+
+    res.status(200).json(sorteosPagados)
+  } catch (error) {
+    console.error('Error en obtenerSorteosPagados:', error)
+    res.status(500).json({ mensaje: error.message || 'Error al obtener la lista de sorteos pagados.' })
   }
 }
 
@@ -118,4 +141,4 @@ const liberarNumerosManualmente = async (req, res) => {
   }
 }
 
-export default { obtenerNumerosRifa, crearNumeroRifa, liberarNumerosManualmente, obtenerDetallesSorteosUsuario, pagarNumeros }
+export default { obtenerNumerosRifa, crearNumeroRifa, liberarNumerosManualmente, obtenerDetallesSorteosUsuario, pagarNumeros, obtenerSorteosPagados }

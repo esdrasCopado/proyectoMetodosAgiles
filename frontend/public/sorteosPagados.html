@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagar Sorteo</title>
+    <title>Sorteos pagados</title>
 
     <link rel="stylesheet" href="estilos/navContainer.css">
     <link rel="stylesheet" href="estilos/homeStyles.css">
@@ -29,7 +29,6 @@
                         <ul class="dropdown-menu">
                             <li><a href="#configuracion">Configuración</a></li>
                             <li><a href="/eliminarNumero.html">Eliminar Número</a></li>
-                            <li><a href="/sorteosPagados.html">Sorteos Pagados</a></li>
                             <li><a href="/pagarSorteo.html">Pagar</a></li>
                         </ul>
                     </li>
@@ -53,17 +52,6 @@
 
     <script src="javaScript/direccionHost.js"></script>
     <script src="javaScript/header.js"></script>
-    <script src="javaScript/generarSorteosPago.js"></script>
-    <script>
-        function pagarNumero(numero) {
-    const confirmacion = confirm(`¿Estás seguro de que deseas pagar el número ${numero}?`);
-    if (confirmacion) {
-        // Simula un pago o realiza una llamada a la API
-        alert(`Has pagado el número ${numero}.`);
-        // Aquí puedes realizar una solicitud POST para registrar el pago
-    }
-}
-
-    </script>
+    <script src="javaScript/sorteosPagados.js"></script>
 </body>
 </html>

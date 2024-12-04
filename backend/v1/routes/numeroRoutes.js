@@ -9,5 +9,6 @@ route
   .get('/numero', numeroController.obtenerNumerosRifa)
   .post('/obtenerDetallesSorteosUsuario', numeroController.obtenerDetallesSorteosUsuario)
   .post('/pagarNumeroSorteosUsuario', numeroController.pagarNumeros)
+  .post('/sorteosPagadosPorElUsuario', numeroController.obtenerSorteosPagados)
 
 export default route

@@ -3,5 +3,5 @@
 
 //direccion local
 
-//const hostUrl = 'http://localhost:3000';
+const hostUrl = 'http://localhost:3000';
 

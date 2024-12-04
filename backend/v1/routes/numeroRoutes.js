@@ -7,5 +7,6 @@ const route = express.Router()
 route
   .post('/numero', numeroController.crearNumeroRifa)
   .get('/numero', numeroController.obtenerNumerosRifa)
+  .post('/obtenerDetallesSorteosUsuario', numeroController.obtenerDetallesSorteosUsuario)
 
 export default route

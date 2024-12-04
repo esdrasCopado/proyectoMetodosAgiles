@@ -1,3 +1,5 @@
+// configuracion modelos index.js
+
 import sequelize from '../config/database.js'
 import NumeroRifa from './numeroRifa.js'
 import Comprobante from './Comprobante.js'

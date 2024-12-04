@@ -3,8 +3,117 @@ import sequelize from '../config/database.js'
 import numeroRifa from '../models/numeroRifa.js'
 import usuarioModel from '../models/Usuario.js'
 import { tiempoDisponible } from './tiempoDisponible.js'
-// import enviarEmail from './emailNotificacion.js'
+import { verificarImagen, guardarImagen } from '../services/imageService.js'
+import Comprobante from '../models/Comprobante.js'
+import enviarEmail from './emailNotificacion.js'
 import Sorteo from '../models/sorteos.js'
+// crea un nuevo registro de comprobante con la imagen del comprobante y se actualiza el estado de los numeros
+export const pagarNumerosService = async (file, numeros, usuarioId) => {
+  const t = await sequelize.transaction() // Crear transacción
+  try {
+    // Verificar y guardar la imagen del comprobante
+    await verificarImagen(file) // Validar el tipo y dimensiones de la imagen
+    const filePath = await guardarImagen(file) // Guardar la imagen y obtener la URL
+
+    // Crear un registro de comprobante en la base de datos
+    const comprobanteGuardado = await Comprobante.create(
+      {
+        url: filePath,
+        descripcion: 'Comprobante de pago'
+      },
+      { transaction: t }
+    )
+
+    // Actualizar los números de rifa
+    const [updatedRows] = await numeroRifa.update(
+      {
+        estado: 'PAGADO',
+        comprobanteId: comprobanteGuardado.id
+      },
+      {
+        where: {
+          numero: numeros,
+          usuarioId,
+          estado: 'APARTADO' // Asegurarse de que el estado sea APARTADO
+        },
+        transaction: t
+      }
+    )
+
+    if (updatedRows === 0) {
+      throw new Error('No se encontraron números para actualizar.')
+    }
+
+    await t.commit() // Confirmar la transacción
+    return {
+      mensaje: 'Números pagados exitosamente.',
+      comprobanteId: comprobanteGuardado.id,
+      urlComprobante: comprobanteGuardado.url
+    }
+  } catch (error) {
+    await t.rollback() // Revertir la transacción en caso de error
+    console.error('Error en pagarNumerosService:', error)
+    throw new Error('Error al procesar el pago.')
+  }
+}
+
+/**
+ * Obtiene detalles del sorteo pagado, incluyendo:
+ * - Nombre del sorteo
+ * - Números pagados
+ * - Imagen del comprobante
+ * @param {number} comprobanteId - ID del comprobante
+ * @returns {object} - Detalles del sorteo pagado
+ */
+export const obtenerDetallesSorteoPagadoService = async (comprobanteId) => {
+  try {
+    // Obtener los números de rifa asociados al comprobante
+    const numeros = await numeroRifa.findAll({
+      where: {
+        comprobanteId,
+        estado: 'PAGADO' // Asegurarse de que el estado sea PAGADO
+      },
+      include: [
+        {
+          model: Sorteo,
+          as: 'sorteo', // Especificar el alias definido en la relación
+          attributes: ['id', 'nombreSorteo', 'ulrImagenSorteo'] // Atributos necesarios
+        }
+      ]
+    })
+
+    if (numeros.length === 0) {
+      throw new Error('No se encontraron números pagados para este comprobante.')
+    }
+
+    // Obtener el comprobante
+    const comprobante = await Comprobante.findByPk(comprobanteId, {
+      attributes: ['url'] // Solo necesitamos la URL del comprobante
+    })
+
+    if (!comprobante) {
+      throw new Error('No se encontró el comprobante.')
+    }
+
+    // Extraer información del sorteo
+    const sorteo = numeros[0].sorteo // Suponemos que todos los números pertenecen al mismo sorteo
+    if (!sorteo) {
+      throw new Error('No se encontró información del sorteo.')
+    }
+
+    // Obtener los números pagados
+    const numerosPagados = numeros.map((numero) => numero.numero)
+
+    return {
+      nombreSorteo: sorteo.nombreSorteo,
+      numerosPagados,
+      urlComprobante: comprobante.url
+    }
+  } catch (error) {
+    console.error('Error en obtenerDetallesSorteoPagadoService:', error)
+    throw new Error('Error al obtener los detalles del sorteo pagado.')
+  }
+}
 
 /**
  * Obtener los números ocupados
@@ -110,7 +219,7 @@ export const eliminarNumerosExpiradosService = async (usuarioId, numerosArray) =
     return
   }
 
-  // const { email } = usuario
+  const { email } = usuario
 
   // Eliminar números con estado APARTADO
   const deletedCount = await numeroRifa.destroy({
@@ -123,7 +232,7 @@ export const eliminarNumerosExpiradosService = async (usuarioId, numerosArray) =
 
   if (deletedCount > 0) {
     console.log(`Registros eliminados: ${deletedCount}`)
-    // await enviarEmail(email, `Los siguientes números expiraron: ${numerosArray.join(', ')}`)
+    await enviarEmail(email, `Los siguientes números expiraron: ${numerosArray.join(', ')}`)
   } else {
     console.warn(`No se encontraron registros para eliminar para usuarioId: ${usuarioId}`)
   }

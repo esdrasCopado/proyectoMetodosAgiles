@@ -1,4 +1,3 @@
-// NumeroRifa.js
 import { DataTypes } from 'sequelize'
 import sequelize from '../config/database.js'
 
@@ -29,7 +28,6 @@ const NumeroRifa = sequelize.define('NumeroRifa', {
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE' // Cambiar SET NULL a CASCADE
   },
-
   sorteoId: {
     type: DataTypes.INTEGER,
     allowNull: false, // Mantener la restricción de NOT NULL
@@ -40,9 +38,19 @@ const NumeroRifa = sequelize.define('NumeroRifa', {
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE' // Cambiar SET NULL a CASCADE
   },
-  reservadoHasta: { // Fecha límite de la reserva
+  reservadoHasta: {
     type: DataTypes.DATE,
-    allowNull: true
+    allowNull: true // Fecha límite de la reserva
+  },
+  comprobanteId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'comprobantes',
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL'
   }
 }, {
   timestamps: true,
@@ -51,7 +59,8 @@ const NumeroRifa = sequelize.define('NumeroRifa', {
   indexes: [
     { fields: ['usuarioId'] },
     { fields: ['sorteoId'] },
-    { fields: ['numero'] }
+    { fields: ['numero'] },
+    { fields: ['comprobanteId'] }
   ]
 })
 

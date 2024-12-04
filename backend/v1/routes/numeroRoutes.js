@@ -7,6 +7,5 @@ const route = express.Router()
 route
   .post('/numero', numeroController.crearNumeroRifa)
   .get('/numero', numeroController.obtenerNumerosRifa)
-  .get('/obtenerNumerosAgrupados', numeroController.obtenerNumerosAgrupados)
 
 export default route

@@ -4,6 +4,9 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import fileUpload from 'express-fileupload'
 
+// Modelos y relaciones de la base de datos
+import db from './models/index.js'
+
 // Rutas de la aplicación
 import v1UserRoutes from './v1/routes/userRoutes.js'
 import v1SorteoRoutes from './v1/routes/sorteoRoutes.js'
@@ -22,18 +25,34 @@ app.use(cors())
 app.use(express.json())
 
 // Middleware para manejar archivos
-app.use(fileUpload({
-  useTempFiles: true,
-  tempFileDir: './uploads/',
-  createParentPath: true,
-  limits: { fileSize: 10 * 1024 * 1024 } // Limitar tamaño de archivos a 10MB
-}))
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: './uploads/',
+    createParentPath: true,
+    limits: { fileSize: 10 * 1024 * 1024 } // Limitar tamaño de archivos a 10MB
+  })
+)
 
 app.use('/uploads', express.static('uploads'))
 
+// Sincronizar modelos con la base de datos
+db.sequelize
+  .sync({ alter: true }) // Puedes usar `force: false` en lugar de `alter` si no deseas modificar la estructura automáticamente
+  .then(() => {
+    console.log('Base de datos sincronizada')
+    // Iniciar el servidor después de sincronizar la base de datos
+    app.listen(PORT, () => {
+      console.log(`Servidor corriendo en el puerto ${PORT}`)
+    })
+  })
+  .catch((err) => {
+    console.error('Error al sincronizar la base de datos:', err)
+  })
+
 // Definir rutas
 app.use('/api/v1/users', v1UserRoutes)
-app.use('/api/v1/sorteo', v1SorteoRoutes) // Eliminar el espacio extra
+app.use('/api/v1/sorteo', v1SorteoRoutes)
 app.use('/api/v1/numeroRifa', v1NumeroRifaRoutes)
 
 // Ruta raíz
@@ -50,18 +69,6 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   console.error(err.stack)
   res.status(500).send('Error interno del servidor')
-})
-
-// Sincronizar la base de datos y luego iniciar el servidor
-sequelize.sync({ force: false }).then(() => {
-  console.log('Base de datos sincronizada')
-
-  // Iniciar el servidor
-  app.listen(PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}`)
-  })
-}).catch(err => {
-  console.error('Error al sincronizar la base de datos:', err)
 })
 
 export default app

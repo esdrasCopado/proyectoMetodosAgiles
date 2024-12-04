@@ -5,7 +5,7 @@ import usuarioModel from '../models/Usuario.js'
 import { tiempoDisponible } from './tiempoDisponible.js'
 import { verificarImagen, guardarImagen } from '../services/imageService.js'
 import Comprobante from '../models/Comprobante.js'
-// import enviarEmail from './emailNotificacion.js'
+import enviarEmail from './emailNotificacion.js'
 import Sorteo from '../models/sorteos.js'
 // crea un nuevo registro de comprobante con la imagen del comprobante y se actualiza el estado de los numeros
 export const pagarNumerosService = async (file, numeros, usuarioId) => {
@@ -219,7 +219,7 @@ export const eliminarNumerosExpiradosService = async (usuarioId, numerosArray) =
     return
   }
 
-  // const { email } = usuario
+  const { email } = usuario
 
   // Eliminar números con estado APARTADO
   const deletedCount = await numeroRifa.destroy({
@@ -232,7 +232,7 @@ export const eliminarNumerosExpiradosService = async (usuarioId, numerosArray) =
 
   if (deletedCount > 0) {
     console.log(`Registros eliminados: ${deletedCount}`)
-    // await enviarEmail(email, `Los siguientes números expiraron: ${numerosArray.join(', ')}`)
+    await enviarEmail(email, `Los siguientes números expiraron: ${numerosArray.join(', ')}`)
   } else {
     console.warn(`No se encontraron registros para eliminar para usuarioId: ${usuarioId}`)
   }

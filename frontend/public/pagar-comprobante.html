@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin-Products</title>
+    <link rel="icon" href="imgs/favicon.png">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+
+    <link rel="stylesheet" href="estilos/dragDrop.css" />
+    <link rel="stylesheet" href="estilos/formularioSorteo.css">
+    <link rel="stylesheet" href="estilos/navContainer.css">
+    <link rel="stylesheet" href="estilos/mensageStyle.css">
+
+    <script src="javaScript/header.js"></script>
+
+    <style>
+
+
+h2 {
+  text-align: center;
+  font-size: 2rem; /* Tamaño flexible basado en el tamaño base */
+  margin-bottom: 1.5rem;
+}
+
+.sorteo-detalle {
+  max-width: 90%; /* Usa 90% del ancho disponible */
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.detalle-contenedor h4 {
+  font-size: 1.5rem; /* Relativo al tamaño de fuente base */
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.5rem;
+  text-align: center; /* Centrado para títulos */
+}
+
+.detalle-contenedor h5 {
+  font-size: 1.2rem; /* Relativo al tamaño base */
+  font-weight: normal;
+  color: #555;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.detalle-contenedor p {
+  font-size: 1rem; /* Más pequeño para párrafos */
+  font-weight: bold;
+  color: #333;
+  margin: 0.5rem 0;
+  text-align: center; /* Centrado */
+}
+
+.detalle-contenedor p span {
+  color: #E91E63; /* Color destacado */
+  font-weight: bold;
+}
+
+/* Estilos responsivos */
+@media (min-width: 768px) {
+  .sorteo-detalle {
+    max-width: 600px; /* Más ancho en pantallas grandes */
+  }
+
+  h2 {
+    font-size: 2.5rem; /* Más grande en pantallas grandes */
+  }
+
+  .detalle-contenedor h4 {
+    font-size: 1.8rem; /* Más grande para pantallas grandes */
+  }
+
+  .detalle-contenedor h5 {
+    font-size: 1.5rem;
+  }
+
+  .detalle-contenedor p {
+    font-size: 1.2rem;
+  }
+}
+
+
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="navContainer">
+                <!-- Logo -->
+                <div class="logo_container">
+                    <a href="home.html">
+                        <img src="imgs/logo.svg" alt="Logo de la página">
+                    </a>
+                </div>
+    
+                <!-- Menú -->
+                <ul class="nav-links">
+                    <li><a href="index.html">Salir</a></li>
+                    <li><a href="formularioSorteos.html">Crear Sorteo</a></li>
+                    <li class="dropdown">
+                        <a href="#" id="usuarioButton">Usuario</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#configuracion">Configuración</a></li>
+                            <li><a href="/eliminarNumero.html">Eliminar Número</a></li>
+                            <li><a href="/pagarSorteo.html">Pagar</a></li>
+                        </ul>
+                    </li>
+                </ul>
+    
+                <!-- Botón de menú hamburguesa para móviles -->
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="input_container">
+        <div class="main">
+            <div id="sorteoDetalle"></div>
+
+
+            <!-------------drag and drop area-------------->
+            <div id="file-upload-form" class="file-upload-form">
+                <div class="file-upload-label">
+                    <div class="file-upload-design">
+                        <svg viewBox="0 0 640 512" height="1em">
+                            <path
+                                d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z">
+                            </path>
+                        </svg>
+                        <p>Suelta la imagen aqui</p>
+                        <label for="file" class="browse-button">Busca la imagen</label>
+                    </div>
+                    <input id="file" type="file" style="display: none" />
+                </div>
+            </div>
+
+            <div id="image-container" style="display: none">
+                <img id="image-preview" src="" alt="Uploaded Image" />
+                <button id="upload-button">
+                    <span id="upload" class="material-symbols-outlined"> publish </span>Registrar Nuevo Sorteo
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="overlay"></div>
+
+    <div id="alert-container"></div>
+
+    </div>
+    <script src="javaScript/alertMesage.js"></script>
+    <script src="javaScript/direccionHost.js"></script>
+    <script src="javaScript/header.js"></script>
+    <script src="javaScript/dragDrop.js"></script>
+    <script src="javaScript/pagarComprobante.js"></script>
+
+
+</body>
+
+</html>
